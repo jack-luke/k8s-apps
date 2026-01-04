@@ -14,24 +14,6 @@ These applications are designed to be deployed via Flux, from the `clusters/home
 └── README.md
 ```
 
-## Documenting Applications
-
-The manifests of every application are documented in a table in its `README.md`. 
-
-The table is started using:
-```markdown
-## Manifests
-| Kind | Name | File | Description |
-| --- | --- | --- | --- |
-```
-
-The manifests are captured in the table by running the follwing command from the application directory:
-```bash
-for f in *.yaml; do yq eval -r '"| " + .kind + " | " + .metadata.name + " | ['"$f"']('"$f"') |  |"' "$f"; done | sort | uniq >> README.md
-```
-
-Descriptions can then be filled in for each manifest. 
-
 ## Clusters
 ### Homelab
 | Kind | Name | File | Description |
@@ -194,3 +176,21 @@ spec:
   dependsOn:
     - name: cert-manager
 ```
+
+## Documenting Applications
+
+The manifests of every application are documented in a table in its `README.md`. 
+
+The table is started using:
+```markdown
+## Manifests
+| Kind | Name | File | Description |
+| --- | --- | --- | --- |
+```
+
+The manifests are captured in the table by running the follwing command from the application directory:
+```bash
+for f in *.yaml; do yq eval -r '"| " + .kind + " | " + .metadata.name + " | ['"$f"']('"$f"') |  |"' "$f"; done | sort | uniq >> README.md
+```
+
+Descriptions can then be filled in for each manifest. 
