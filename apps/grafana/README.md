@@ -9,14 +9,14 @@ Provisioned datasources are managed with Vault, due to credentials in their conf
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| BackendTLSPolicy | grafana | [backend-tls-policy.yaml](backend-tls-policy.yaml) |  |
-| Certificate | grafana | [certificate.yaml](certificate.yaml) |  |
-| HelmRelease | grafana | [helm.yaml](helm.yaml) |  |
-| HelmRepository | grafana | [helm.yaml](helm.yaml) |  |
-| HTTPRoute | grafana-route | [http-route.yaml](http-route.yaml) |  |
+| BackendTLSPolicy | grafana | [backend-tls-policy.yaml](backend-tls-policy.yaml) | Configures TLS verification between the API gateway and Grafana service it routes traffic to. |
+| Certificate | grafana | [certificate.yaml](certificate.yaml) | Requests a set of TLS certificates from Cert Manager for the Grafana server to use. |
+| HelmRelease | grafana | [helm.yaml](helm.yaml) | Installs Grafana. |
+| HelmRepository | grafana | [helm.yaml](helm.yaml) | Grafana Helm charts. |
+| HTTPRoute | grafana-route | [http-route.yaml](http-route.yaml) | Routes traffic from the API gateway to the Grafana service. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | grafana | [namespace.yaml](namespace.yaml) |  |
-| ServiceAccount | grafana | [service-account.yaml](service-account.yaml) |  |
-| VaultAuth | grafana | [secret.yaml](secret.yaml) |  |
-| VaultStaticSecret | grafana-auth | [secret.yaml](secret.yaml) |  |
-| VaultStaticSecret | grafana-datasources | [secret.yaml](secret.yaml) |  |
+| ServiceAccount | grafana | [service-account.yaml](service-account.yaml) | ServiceAccount for Grafana to use. |
+| VaultAuth | grafana | [secret.yaml](secret.yaml) | Authenticates the grafana ServiceAccount against the grafana Vault Kubernetes auth role. |
+| VaultStaticSecret | grafana-auth | [secret.yaml](secret.yaml) | Configures Vault Secrets Operator to populate the grafana-auth Secret with Grafana admin user credentials. |
+| VaultStaticSecret | grafana-datasources | [secret.yaml](secret.yaml) | Configures Vault Secrets Operator to populate the grafana-datasources Secret with a `datasources.yaml` file for connecting to InfluxDB and other data sources. |
