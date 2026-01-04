@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: vector
+spec:
+  template:
+    spec:
+      serviceAccountName: vector
+      hostPID: true
+      containers:
+        - name: vector
+          image: timberio/vector:latest-alpine
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8222
+          envFrom:
+            - secretRef:
+                name: influxdb-write-token
+          env:
+            - name: VECTOR_SELF_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+          volumeMounts:
+            - name: config
+              mountPath: /etc/vector/
+              readOnly: true
+            - name: var-log
+              mountPath: /var/log/
+            - name: var-lib
+              mountPath: /var/lib/vector
+            - name: k8s-logs
+              mountPath: /var/log/pods
+              readOnly: true
+            - name: thermal
+              mountPath: /thermal
+              readOnly: true
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+            requests:
+              cpu: "250m"
+              memory: "250Mi"
+          securityContext:
+            privileged: true
+            readOnlyRootFilesystem: true
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 1000
+            seccompProfile:
+              type: RuntimeDefault
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: config
+          configMap:
+            name: vector-config
+        - name: var-log
+          emptyDir: {}
+        - name: var-lib
+          emptyDir: {}
+        - name: k8s-logs
+          hostPath:
+            path: /var/log/pods
+            type: Directory
+        - name: thermal
+          hostPath:
+            path: /sys/class/thermal/thermal_zone0/temp

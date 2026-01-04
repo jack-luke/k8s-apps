@@ -1,0 +1,316 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_INFLUXDB",
+      "label": "influxdb",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "pluginName": "InfluxDB"
+    }
+  ],
+  "__elements": {},
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "11.5.1"
+    },
+    {
+      "type": "datasource",
+      "id": "influxdb",
+      "name": "InfluxDB",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 38,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "influxdb"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "kubernetes.pod_labels.app_kubernetes_io_name"
+            },
+            "properties": []
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container"
+            },
+            "properties": []
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 20,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "options": {
+        "dedupStrategy": "none",
+        "detailsMode": "inline",
+        "enableInfiniteScrolling": false,
+        "enableLogDetails": true,
+        "fontSize": "default",
+        "prettifyLogMessage": true,
+        "showCommonLabels": true,
+        "showControls": false,
+        "showLabels": true,
+        "showTime": true,
+        "sortOrder": "Descending",
+        "syntaxHighlighting": true,
+        "wrapLogMessage": false
+      },
+      "pluginVersion": "12.3.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "influxdb"
+          },
+          "groupBy": [
+            {
+              "params": [
+                "level::tag"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "container::tag"
+              ],
+              "type": "tag"
+            }
+          ],
+          "limit": "250",
+          "measurement": "k8s_logs",
+          "orderByTime": "DESC",
+          "policy": "default",
+          "query": "SELECT last(\"kubernetes.pod_labels.app_kubernetes_io_name\") AS \"Name\", last(\"message\") AS \"Message\" FROM \"k8s_logs\" WHERE $timeFilter GROUP BY time($__interval) fill(none)",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "logs",
+          "select": [
+            [
+              {
+                "params": [
+                  "message"
+                ],
+                "type": "field"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "condition": "AND",
+              "key": "namespace::tag",
+              "operator": "=~",
+              "value": "/^$namespace$/"
+            },
+            {
+              "condition": "AND",
+              "key": "app::tag",
+              "operator": "=~",
+              "value": "/^$app$/"
+            },
+            {
+              "condition": "AND",
+              "key": "container::tag",
+              "operator": "=~",
+              "value": "/^$container$/"
+            },
+            {
+              "condition": "AND",
+              "key": "level::tag",
+              "operator": "=~",
+              "value": "/^$level$/"
+            },
+            {
+              "condition": "AND",
+              "key": "node::tag",
+              "operator": "=~",
+              "value": "/^$node$/"
+            }
+          ]
+        }
+      ],
+      "title": "",
+      "transparent": true,
+      "type": "logs"
+    }
+  ],
+  "preload": false,
+  "refresh": "5s",
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"namespace\" WHERE $timeFilter",
+        "description": "",
+        "includeAll": false,
+        "label": "Namespace",
+        "name": "namespace",
+        "options": [],
+        "query": {
+          "query": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"namespace\" WHERE $timeFilter",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {},
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"app\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/",
+        "description": "'app' or 'app.kubernetes.io/name' label",
+        "includeAll": true,
+        "label": "App",
+        "name": "app",
+        "options": [],
+        "query": {
+          "query": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"app\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"container\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/ AND \"app\" =~ /^$app$/",
+        "includeAll": true,
+        "label": "Container",
+        "name": "container",
+        "options": [],
+        "query": {
+          "query": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"container\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/ AND \"app\" =~ /^$app$/",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"level\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/ AND \"app\" =~ /^$app$/ AND \"container\" =~ /^$container$/",
+        "description": "Log severity level ",
+        "includeAll": true,
+        "label": "Level",
+        "name": "level",
+        "options": [],
+        "query": {
+          "query": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"level\" WHERE $timeFilter AND \"namespace\" =~ /^$namespace$/ AND \"app\" =~ /^$app$/ AND \"container\" =~ /^$container$/",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": {
+          "type": "influxdb",
+          "uid": "influxdb"
+        },
+        "definition": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"node\" WHERE $timeFilter",
+        "description": "Kubernetes node from which the logs were emitted",
+        "includeAll": true,
+        "label": "Node",
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "SHOW TAG VALUES FROM \"k8s_logs\" WITH KEY = \"node\" WHERE $timeFilter",
+          "refId": "InfluxVariableQueryEditor-VariableQuery"
+        },
+        "refresh": 2,
+        "regex": "",
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Kubernetes Logs",
+  "uid": "eepvislnsq134b",
+  "version": 1
+}

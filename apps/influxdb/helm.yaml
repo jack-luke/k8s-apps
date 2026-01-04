@@ -1,0 +1,52 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: influxdb
+  namespace: influxdb
+spec:
+  interval: 15m
+  url: https://helm.influxdata.com/
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: influxdb
+  namespace: influxdb
+spec:
+  interval: 15m
+  chart:
+    spec:
+      chart: influxdb2
+      version: "2.1.2"
+      sourceRef:
+        kind: HelmRepository
+        name: influxdb
+        namespace: influxdb
+  releaseName: influxdb
+  driftDetection:
+    mode: enabled
+  values:
+    image:
+      tag: 2.7.11-alpine
+    service:
+      type: LoadBalancer
+      port: 8086
+    serviceAccount:
+      name: influxdb
+    adminUser:
+      existingSecret: influxdb-auth
+      organization: homelab
+      bucket: data
+      retention_policy: 1d
+    persistence:
+      size: 20Gi
+    securityContext:
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      runAsUser: 1000
+      runAsGroup: 1000
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL
