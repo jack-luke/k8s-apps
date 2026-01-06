@@ -1,59 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: influxdb
+  name: apps
   namespace: flux-system
 spec:
   interval: 5m0s
+  path: ./apps/homelab
   sourceRef:
     kind: GitRepository
     name: k8s-apps
-  path: ./apps/influxdb
   prune: true
+  wait: true
   dependsOn:
-    - name: vault
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: grafana
-  namespace: flux-system
-spec:
-  interval: 5m0s
-  sourceRef:
-    kind: GitRepository
-    name: k8s-apps
-  path: ./apps/grafana
-  prune: true
-  dependsOn:
-    - name: vault
-    - name: envoy
-    - name: cert-manager
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: vector
-  namespace: flux-system
-spec:
-  interval: 5m0s
-  sourceRef:
-    kind: GitRepository
-    name: k8s-apps
-  path: ./apps/vector
-  prune: true
-  dependsOn:
-    - name: vault
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: registry
-  namespace: flux-system
-spec:
-  interval: 5m0s
-  sourceRef:
-    kind: GitRepository
-    name: k8s-apps
-  path: ./apps/registry
-  prune: true
+    - name: infra-configs
