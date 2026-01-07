@@ -6,7 +6,13 @@ spec:
   template:
     spec:
       serviceAccountName: vector
-      hostPID: true
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 0 # required to read /var/log/pods
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: vector
           image: timberio/vector:latest-alpine
@@ -22,18 +28,19 @@ spec:
                 fieldRef:
                   fieldPath: spec.nodeName
           volumeMounts:
-            - name: config
+            - name: vector-config
               mountPath: /etc/vector/
               readOnly: true
-            - name: var-log
-              mountPath: /var/log/
             - name: var-lib
               mountPath: /var/lib/vector
-            - name: k8s-logs
+            - name: k8s-pod-logs
               mountPath: /var/log/pods
               readOnly: true
-            - name: thermal
-              mountPath: /thermal
+            - name: host-proc
+              mountPath: /proc
+              readOnly: true
+            - name: host-sys
+              mountPath: /sys
               readOnly: true
           resources:
             limits:
@@ -43,29 +50,26 @@ spec:
               cpu: "50m"
               memory: "64Mi"
           securityContext:
-            privileged: true
-            allowPrivilegeEscalation: true
+            allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
-            runAsNonRoot: false
-            runAsUser: 0
-            runAsGroup: 1000
-            seccompProfile:
-              type: RuntimeDefault
             capabilities:
               drop:
                 - ALL
       volumes:
-        - name: config
+        - name: vector-config
           configMap:
             name: vector-config
-        - name: var-log
-          emptyDir: {}
         - name: var-lib
           emptyDir: {}
-        - name: k8s-logs
+        - name: k8s-pod-logs
           hostPath:
             path: /var/log/pods
             type: Directory
-        - name: thermal
+        - name: host-proc
           hostPath:
-            path: /sys/class/thermal/thermal_zone0/temp
+            path: /proc
+            type: Directory
+        - name: host-sys
+          hostPath:
+            path: /sys
+            type: Directory

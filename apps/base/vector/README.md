@@ -7,8 +7,8 @@ Configuration of Vector data pipelines is done using `config/vector.yaml`
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| ClusterRole | log-reader-role | [cluster-role.yaml](cluster-role.yaml) | Role to allow Vector to read all Kubernetes pod logs. |
-| ClusterRoleBinding | log-reader-binding | [cluster-role.yaml](cluster-role.yaml) | Binds the log-reader-role to the vector ServiceAccount. |
+| ClusterRole | log-reader-role | [cluster-role.yaml](cluster-role.yaml) | Role to allow Vector to read Kubernetes metadata. |
+| ClusterRoleBinding | log-reader-binding | [cluster-role.yaml](cluster-role.yaml) | Binds the Vector Role to the vector ServiceAccount. |
 | DaemonSet | vector | [daemonset.yaml](daemonset.yaml) | Deploys Vector to every node of the cluster. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | vector | [namespace.yaml](namespace.yaml) |  |

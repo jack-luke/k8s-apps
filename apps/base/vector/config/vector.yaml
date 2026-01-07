@@ -42,7 +42,7 @@ sources:
 
   thermal:
     type: exec
-    command: ["cat", "/thermal"]
+    command: ["cat", "/sys/class/thermal/thermal_zone0/temp"]
     mode: scheduled
     scheduled:
       exec_interval_secs: 5
