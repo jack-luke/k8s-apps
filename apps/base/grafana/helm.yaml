@@ -27,7 +27,6 @@ spec:
       existingSecret: grafana-auth
     service:
       port: 3000
-      type: LoadBalancer
     readinessProbe:
       httpGet:
         path: /api/health
@@ -51,12 +50,30 @@ spec:
     persistence:
       enabled: true
       size: 8Gi
+    resources:
+      limits:
+        cpu: "200m"
+        memory: "256Mi"
+      requests:
+        cpu: "100m"
+        memory: "128Mi"
     sidecar:
       datasources:
         enabled: true
+        resource: secret
+        searchNamespace: ["grafana"]
       dashboards:
         enabled: true
         labelValue: "yes"
+        resource: configmap
+        searchNamespace: ["grafana"]
+      resources:
+        limits:
+          cpu: "100m"
+          memory: "300Mi"
+        requests:
+          cpu: "25m"
+          memory: "200Mi"
     grafana.ini:
       server:
         serve_from_sub_path: true

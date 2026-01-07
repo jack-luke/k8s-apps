@@ -13,3 +13,4 @@ spec:
   wait: true
   dependsOn:
     - name: infra-configs
+    - name: policies

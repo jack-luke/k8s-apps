@@ -4,13 +4,13 @@ metadata:
   name: grafana
 spec:
   targetRefs:
-  - group: ''
-    kind: Service
-    name: grafana
-    sectionName: service
+    - group: ''
+      kind: Service
+      name: grafana
+      sectionName: service
   validation:
     caCertificateRefs:
-    - name: vault-issuer-ca
-      group: ''
-      kind: ConfigMap
-    hostname: rpi5-1
+      - name: vault-issuer-ca
+        group: ''
+        kind: ConfigMap
+    hostname: grafana.grafana.svc.cluster.local

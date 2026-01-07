@@ -40,6 +40,13 @@ spec:
       retention_policy: 1d
     persistence:
       size: 20Gi
+    resources:
+      limits:
+        cpu: "500m"
+        memory: "1Gi"
+      requests:
+        cpu: "100m"
+        memory: "512Mi"
     securityContext:
       allowPrivilegeEscalation: false
       runAsNonRoot: true

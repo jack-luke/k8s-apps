@@ -133,9 +133,9 @@ transforms:
     inputs:
       - remap_k8s_logs
     route:
-      klog: includes(["metrics-server", "local-path-provisioner"], .container)
+      klog: includes(["metrics-server", "local-path-provisioner", "cert-manager-controller", "cert-manager-cainjector", "cert-manager-webhook"], .container)
       json: includes(["grafana-sc-datasources", "grafana-sc-dashboard", "notifications-controller"], .container)
-      key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server"], .container)
+      key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server", "trust-manager"], .container)
       vault: includes(["vault", "sidecar-injector"], .container)
       vault-secrets-operator: .app == "vault-secrets-operator"
       envoy: .container == "envoy"

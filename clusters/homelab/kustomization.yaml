@@ -7,3 +7,4 @@ interval: 5m0s
 resources:
   - ./infrastructure.yaml
   - ./apps.yaml
+  - ./policy.yaml

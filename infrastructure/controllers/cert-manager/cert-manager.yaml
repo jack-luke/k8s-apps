@@ -23,3 +23,26 @@ spec:
       kind: ControllerConfiguration
       apiVersion: controller.config.cert-manager.io/v1alpha1
       enableGatewayAPI: true
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "128Mi" 
+      requests:
+        cpu: "50m"
+        memory: "64Mi"
+    webhook:
+      resources:
+        limits:
+          cpu: "50m"
+          memory: "64Mi" 
+        requests:
+          cpu: "10m"
+          memory: "32Mi"
+    cainjector:
+      resources:
+        limits:
+          cpu: "50m"
+          memory: "64Mi" 
+        requests:
+          cpu: "10m"
+          memory: "32Mi"

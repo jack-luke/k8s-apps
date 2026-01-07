@@ -1,0 +1,35 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: cert-manager-limit-duration
+  annotations:
+    policies.kyverno.io/title: Certificate max duration 90 days
+    policies.kyverno.io/category: Cert-Manager
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/minversion: 1.6.0
+    policies.kyverno.io/subject: Certificate
+    policies.kyverno.io/description: >-
+      Limits the duration of every Cert Manager Certificate to 90 days.
+spec:
+  validationFailureAction: Audit
+  background: false
+  rules:
+    - name: certificate-duration-max-100days 
+      match:
+        any:
+          - resources:
+              kinds:
+                - Certificate
+      preconditions:
+        all:
+          - key: "{{ request.object.spec.duration || false }}"
+            operator: NotEquals
+            value: false
+      validate:
+        message: "certificate duration must be < than 2160h (90 days)"
+        deny:
+          conditions:
+            all:
+              - key: "{{ to_number(regex_replace_all('h.*', request.object.spec.duration, '')) }}"
+                operator: GreaterThan
+                value: 2160

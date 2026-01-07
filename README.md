@@ -1,6 +1,7 @@
 # Kubernetes Homelab Applications
 
-Flux repository for Homelab Kubernetes applications, synced automatically to clusters installed with the [k8s-bootstrap](https://github.com/jack-luke/k8s-bootstrap) project.
+Flux repository for Homelab Kubernetes applications, synced automatically to clusters
+installed with the [k8s-bootstrap](https://github.com/jack-luke/k8s-bootstrap) project.
 
 ## Usage
 ### Sync with Flux Operator
@@ -61,7 +62,8 @@ So, before secrets can be rolled out:
 * All secrets must be stored in the Vault server
 
 > [!NOTE] 
-> I also maintain a project which securely automates this process with Terraform and GitLab CI, however it is not yet ready for release.
+> I also maintain a project which securely automates this process with 
+> Terraform and GitLab CI, however it is not yet ready for release.
 
 The details of the secret locations and authentication role names required for
 each secret are documented in the README.md files of the individual 
@@ -76,11 +78,15 @@ applications.
 │   └── homelab
 ├── clusters # Environment definitions 
 │   └── homelab
-└── infrastructure # Services that are deployed to support applications
-    ├── configs
+├── infrastructure # Services that are deployed to support applications
+│   ├── configs
+│   │   └── <app>/
+│   └── controllers
+│   │   └── <app>/
+└── policy # Policy engines that govern cluster compliance
+    ├── controllers
     │   └── <app>/
-    └── controllers
-        └── <app>/
+    └── policies
 ```
 
 ### Infrastructure
@@ -90,15 +96,21 @@ utilises, which are primarily HelmRepositories and HelmReleases.
 Additionally, any Namespaces or ServiceAccounts the infrastructure services 
 require to deploy should be created here.
 
+Depends on the `policies` Kustomization, to ensure that all policy rules are 
+in place prior to installing these resources.
+
 #### Configs
 Contains resources to configure infrastructure services, such as Gateways, 
 ClusterIssuers etc. 
-This depends on the infrastructure controllers to ensure that all CRDs are 
-installed prior to installing these resources.
+
+This depends on the `infra-controllers` Kustomization to ensure that all CRDs 
+are installed prior to installing these resources.
 
 ### Apps
-Depends on the infrastructre configs, to ensure that all CRDs and supporting services are 
-installed.
+Installs cluster applications.
+
+Depends on the `infra-configs` Kustomization, to ensure that all CRDs and 
+supporting services are installed prior to installing these resources.
 
 #### Base
 The base configuration for each application.
@@ -107,6 +119,22 @@ The base configuration for each application.
 A directory for every cluster environment defined in [/clusters](/clusters), 
 containing overlays to configure the infrastructure and applications for the
 target environment.
+
+### Policy
+Contains resources to setup compliance rules in the cluster, currently via 
+Kyverno.
+
+#### Controllers
+Installs all policy engines in the cluster to ensure CRDs exist before applying
+policies.
+Additionally, any Namespaces or ServiceAccounts the infrastructure services 
+require to deploy should be created here.
+
+#### Policies
+Contains the policy rules that should be applied to the cluster.
+
+Depends on the `policy-controllers` Kustomization, to ensure that all CRDs and 
+policy engines are installed prior to installing these resources.
 
 ## Help & Resources
 * [flux2-kustomize-helm-example](https://github.com/fluxcd/flux2-kustomize-helm-example/tree/main) (used as the basis for this repo structure)

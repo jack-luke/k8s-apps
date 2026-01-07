@@ -16,3 +16,11 @@ spec:
   releaseName: trust-manager
   driftDetection:
     mode: enabled
+  values:
+    resources:
+      limits:
+        cpu: "100m"
+        memory: "128Mi" 
+      requests:
+        cpu: "50m"
+        memory: "32Mi"

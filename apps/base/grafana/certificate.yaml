@@ -4,15 +4,20 @@ metadata:
   name: grafana
 spec:
   secretName: grafana-tls
-  duration: 2160h # 90d
-  renewBefore: 360h # 15d
+  duration: 720h # 30 days
+  renewBefore: 168h # 7 days
   isCA: false
   usages:
+    - digital signature
+    - key encipherment
     - server auth
     - client auth
-  commonName: Grafana
+  commonName: grafana.grafana.svc.cluster.local
   dnsNames:
-    - rpi5-1
+    - grafana
+    - grafana.grafana
+    - grafana.grafana.svc
+    - grafana.grafana.svc.cluster.local
   issuerRef:
     name: vault-issuer
     kind: ClusterIssuer
