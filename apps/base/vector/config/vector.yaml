@@ -133,14 +133,15 @@ transforms:
     inputs:
       - remap_k8s_logs
     route:
-      klog: includes(["metrics-server", "local-path-provisioner", "cert-manager-controller", "cert-manager-cainjector", "cert-manager-webhook"], .container)
+      klog: includes(["metrics-server", "local-path-provisioner", "cert-manager-controller", "cert-manager-cainjector", "cert-manager-webhook", "node-driver-registrar", "secrets-store"], .container)
       json: includes(["grafana-sc-datasources", "grafana-sc-dashboard", "notifications-controller"], .container)
       key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server", "trust-manager"], .container)
-      vault: includes(["vault", "sidecar-injector"], .container)
+      vault: includes(["vault", "sidecar-injector", "vault-csi-provider"], .container)
       vault-secrets-operator: .app == "vault-secrets-operator"
       envoy: .container == "envoy"
       envoy_gateway: .container == "envoy-gateway"
       flux: .namespace == "flux-system"
+      kyverno: .namespace == "kyverno"
 
 
   parse_klog:
@@ -213,6 +214,7 @@ transforms:
       - k8s_log_router.json
       - k8s_log_router.flux
       - k8s_log_router.vault-secrets-operator
+      - k8s_log_router.kyverno
     source: |
       # The 'message' field is always a string from stdout, so this always succeeds
       message_string = to_string(.message) ?? "" 
@@ -352,7 +354,7 @@ sinks:
       - thermal_to_metric
       - smart_home_router.metrics
       - label_* # all metrics labellers
-    endpoint: http://influxdb-influxdb2.influxdb.svc.cluster.local:8086
+    endpoint: ${INFLUXDB_ADDR}
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
@@ -362,6 +364,11 @@ sinks:
       max_events: 25000
     request:
       retry_attempts: 5
+    tls:
+      server_name: ${INFLUXDB_SERVER_NAME}
+      ca_file: /etc/ssl/certs/ca.crt
+      verify_certificate: true
+      verify_hostname: true
 
   logs:
     # Kubernetes pod logs
@@ -370,7 +377,7 @@ sinks:
     inputs: 
       - k8s_log_router._unmatched
       - parse_* # all log parsers
-    endpoint: http://influxdb-influxdb2.influxdb.svc.cluster.local:8086
+    endpoint: ${INFLUXDB_ADDR}
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
@@ -381,6 +388,11 @@ sinks:
     tags: [level, container, namespace, app, node]
     request:
       retry_attempts: 5
+    tls:
+      server_name: ${INFLUXDB_SERVER_NAME}
+      ca_file: /etc/ssl/certs/ca.crt
+      verify_certificate: true
+      verify_hostname: true
 
   docker_logs:
     # Logs from the smart home Docker containers
@@ -389,7 +401,7 @@ sinks:
     inputs: 
       - smart_home_router.logs
       - smart_home_router._unmatched
-    endpoint: http://influxdb-influxdb2.influxdb.svc.cluster.local:8086
+    endpoint: ${INFLUXDB_ADDR}
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
@@ -400,3 +412,8 @@ sinks:
     tags: [level, container, node, tag]
     request:
       retry_attempts: 5
+    tls:
+      server_name: ${INFLUXDB_SERVER_NAME}
+      ca_file: /etc/ssl/certs/ca.crt
+      verify_certificate: true
+      verify_hostname: true

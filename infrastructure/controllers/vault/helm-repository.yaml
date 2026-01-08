@@ -6,3 +6,12 @@ metadata:
 spec:
   interval: 24h
   url: https://helm.releases.hashicorp.com
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: secrets-store-csi-driver
+  namespace: kube-system
+spec:
+  interval: 24h
+  url: https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts 

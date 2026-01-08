@@ -23,6 +23,41 @@ spec:
       enabled: true
     injector:
       enabled: false
+    csi:
+      enabled: true
+      agent:
+        enabled: false
+      daemonSet:
+        securityContext:
+          pod:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+          container:
+            runAsUser: 0
+            runAsGroup: 0
+            runAsNonRoot: false
+            allowPrivilegeEscalation: false
+            privileged: false
+            seccompProfile:
+              type: RuntimeDefault
+      extraArgs:
+        - -vault-addr="https://vault.vault.svc.cluster.local:8200"
+        - -vault-tls-server-name=vault.vault
+        - -vault-tls-ca-cert=/etc/ssl/certs/ca.crt
+      volumeMounts:
+        - name: vault-ca
+          mountPath: /etc/ssl/certs/ca.crt
+          subPath: ca.crt
+          readOnly: true
+      volumes:
+        - name: vault-ca
+          secret:
+            secretName: vault-ca
     server:
       service:
         type: LoadBalancer

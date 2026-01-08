@@ -4,7 +4,7 @@ metadata:
   name: influxdb
   namespace: influxdb
 spec:
-  interval: 15m
+  interval: 24h
   url: https://helm.influxdata.com/
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -13,7 +13,7 @@ metadata:
   name: influxdb
   namespace: influxdb
 spec:
-  interval: 15m
+  interval: 12h
   chart:
     spec:
       chart: influxdb2
@@ -38,6 +38,22 @@ spec:
       organization: homelab
       bucket: data
       retention_policy: 1d
+    env:
+      - name: INFLUXD_TLS_CERT
+        value: "/etc/ssl/tls.crt"
+      - name: INFLUXD_TLS_KEY
+        value: "/etc/ssl/tls.key"
+    volumes:
+      - name: influxdb2-tls
+        secret:
+          secretName: influxdb-tls
+    mountPoints:
+      - name: influxdb2-tls
+        mountPath: /etc/ssl
+        readOnly: true
+    podAnnotations:
+      reloader.stakater.com/auto: "true"
+      reloader.stakater.com/rollout-strategy: "restart"
     persistence:
       size: 20Gi
     resources:
@@ -57,3 +73,7 @@ spec:
       capabilities:
         drop:
           - ALL
+    livenessProbe:
+      scheme: "HTTPS"
+    readinessProbe:
+      scheme: "HTTPS"

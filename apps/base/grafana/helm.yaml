@@ -4,7 +4,7 @@ metadata:
   name: grafana
   namespace: grafana
 spec:
-  interval: 15m
+  interval: 24h
   url: https://grafana.github.io/helm-charts
 ---
 apiVersion: helm.toolkit.fluxcd.io/v2
@@ -13,7 +13,7 @@ metadata:
   name: grafana
   namespace: grafana
 spec:
-  interval: 15m
+  interval: 12h
   chart:
     spec:
       chart: grafana
@@ -47,6 +47,9 @@ spec:
         readOnly: true
         optional: false
         subPath: ""
+    annotations:
+      reloader.stakater.com/auto: "true"
+      reloader.stakater.com/rollout-strategy: "restart"
     persistence:
       enabled: true
       size: 8Gi
@@ -69,7 +72,7 @@ spec:
         searchNamespace: ["grafana"]
       resources:
         limits:
-          cpu: "100m"
+          cpu: "250m"
           memory: "300Mi"
         requests:
           cpu: "25m"
@@ -82,3 +85,11 @@ spec:
         protocol: https
         cert_key: /etc/grafana/certs/tls.key
         cert_file: /etc/grafana/certs/tls.crt
+    initChownData:
+      securityContext:
+        capabilities:
+          add:
+            - CHOWN
+            - DAC_OVERRIDE
+          drop:
+            - ALL

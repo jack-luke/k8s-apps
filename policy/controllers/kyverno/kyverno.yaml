@@ -16,3 +16,8 @@ spec:
   releaseName: kyverno
   driftDetection:
     mode: enabled
+  values:
+    features:
+      logging:
+        format: json
+        verbosity: 2

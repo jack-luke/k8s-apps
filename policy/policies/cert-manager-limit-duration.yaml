@@ -14,7 +14,7 @@ spec:
   validationFailureAction: Audit
   background: false
   rules:
-    - name: certificate-duration-max-100days 
+    - name: certificate-duration-max-90days 
       match:
         any:
           - resources:
@@ -22,9 +22,9 @@ spec:
                 - Certificate
       preconditions:
         all:
-          - key: "{{ request.object.spec.duration || false }}"
+          - key: "{{ request.object.spec.duration || 'Missing' }}"
             operator: NotEquals
-            value: false
+            value: Missing
       validate:
         message: "certificate duration must be < than 2160h (90 days)"
         deny:

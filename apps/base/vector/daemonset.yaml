@@ -2,6 +2,9 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: vector
+  annotations:
+    reloader.stakater.com/auto: "true"
+    reloader.stakater.com/rollout-strategy: "restart"
 spec:
   template:
     spec:
@@ -27,9 +30,16 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: INFLUXDB_ADDR
+              value: "https://influxdb-influxdb2.influxdb.svc.cluster.local:8086"
+            - name: INFLUXDB_SERVER_NAME
+              value: "influxdb-influxdb2.influxdb.svc.cluster.local"
           volumeMounts:
             - name: vector-config
               mountPath: /etc/vector/
+              readOnly: true
+            - name: vault-issuer-ca
+              mountPath: /etc/ssl/certs/
               readOnly: true
             - name: var-lib
               mountPath: /var/lib/vector
@@ -59,6 +69,9 @@ spec:
         - name: vector-config
           configMap:
             name: vector-config
+        - name: vault-issuer-ca
+          configMap:
+            name: vault-issuer-ca
         - name: var-lib
           emptyDir: {}
         - name: k8s-pod-logs
