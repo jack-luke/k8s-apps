@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - security-context.yaml
   - cert-manager-limit-duration.yaml
+  - cert-manager-certificate-defaults.yaml

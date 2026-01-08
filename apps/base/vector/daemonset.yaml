@@ -16,6 +16,10 @@ spec:
         fsGroup: 0 # required to read /var/log/pods
         seccompProfile:
           type: RuntimeDefault
+      updateStrategy:
+        type: RollingUpdate
+        rollingUpdate:
+          maxUnavailable: 0
       containers:
         - name: vector
           image: timberio/vector:latest-alpine
@@ -54,7 +58,7 @@ spec:
               readOnly: true
           resources:
             limits:
-              cpu: "150m"
+              cpu: "250m"
               memory: "256Mi"
             requests:
               cpu: "50m"

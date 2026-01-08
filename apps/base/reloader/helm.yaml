@@ -27,6 +27,8 @@ spec:
     mode: enabled
   values:
     reloader:
+      reloadOnCreate: true
+      syncAfterRestart: true
       deployment:
         resources:
           limits:

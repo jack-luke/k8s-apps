@@ -3,10 +3,8 @@ kind: Certificate
 metadata:
   name: influxdb
 spec:
-  secretName: influxdb-tls
   duration: 720h # 30 days
   renewBefore: 168h # 7 days
-  isCA: false
   usages:
     - digital signature
     - key encipherment
@@ -18,7 +16,3 @@ spec:
     - influxdb-influxdb2.influxdb
     - influxdb-influxdb2.influxdb.svc
     - influxdb-influxdb2.influxdb.svc.cluster.local
-  issuerRef:
-    name: vault-issuer
-    kind: ClusterIssuer
-    group: ""

@@ -11,12 +11,18 @@ resources:
   - helm.yaml
 
 configMapGenerator:
-- name: grafana-dashboards
-  files:
-    - dashboards/Cluster-Dashboard.json
-    - dashboards/Data-Pipeline.json
-    - dashboards/Docker-Logs.json
-    - dashboards/Kubernetes-Logs.json
-  options:
-    labels:
-      grafana_dashboard: "yes"
+  - name: grafana-dashboards
+    files:
+      - dashboards/Cluster-Dashboard.json
+      - dashboards/Data-Pipeline.json
+      - dashboards/Docker-Logs.json
+      - dashboards/Kubernetes-Logs.json
+    options:
+      labels:
+        grafana_dashboard: "yes"
+  - name: grafana-datasources
+    files:
+      - datasources/datasources.yaml
+    options:
+      labels:
+        grafana_datasource: "yes"

@@ -135,7 +135,7 @@ transforms:
     route:
       klog: includes(["metrics-server", "local-path-provisioner", "cert-manager-controller", "cert-manager-cainjector", "cert-manager-webhook", "node-driver-registrar", "secrets-store"], .container)
       json: includes(["grafana-sc-datasources", "grafana-sc-dashboard", "notifications-controller"], .container)
-      key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server", "trust-manager"], .container)
+      key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server", "trust-manager", "reloader-reloader"], .container)
       vault: includes(["vault", "sidecar-injector", "vault-csi-provider"], .container)
       vault-secrets-operator: .app == "vault-secrets-operator"
       envoy: .container == "envoy"

@@ -40,13 +40,18 @@ spec:
       initialDelaySeconds: 60
       timeoutSeconds: 30
       failureThreshold: 10
+    envFromSecret: "influxdb-read-token" # INFLUXDB_READ_TOKEN: Used in datasources to authenticate to InfluxDB
+    envValueFrom:
+      # Used in datasources to verify other server certs
+      VAULT_ISSUER_CA:
+        configMapKeyRef:
+          name: vault-issuer-ca
+          key: ca.crt
     extraSecretMounts:
       - name: grafana-tls
         mountPath: /etc/grafana/certs
         secretName: grafana-tls
         readOnly: true
-        optional: false
-        subPath: ""
     annotations:
       reloader.stakater.com/auto: "true"
       reloader.stakater.com/rollout-strategy: "restart"
@@ -63,7 +68,7 @@ spec:
     sidecar:
       datasources:
         enabled: true
-        resource: secret
+        resource: configmap
         searchNamespace: ["grafana"]
       dashboards:
         enabled: true
@@ -87,6 +92,8 @@ spec:
         cert_file: /etc/grafana/certs/tls.crt
     initChownData:
       securityContext:
+        # CAP_ADD required to prevent initError
+        # See: https://github.com/grafana/helm-charts/issues/752#issuecomment-3239398234
         capabilities:
           add:
             - CHOWN

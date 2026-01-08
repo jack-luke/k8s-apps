@@ -1,0 +1,39 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: certificate-defaults
+  annotations:
+    policies.kyverno.io/title: Certificate Defaults
+    policies.kyverno.io/category: Cert-Manager
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Certificate
+    policies.kyverno.io/description: >-
+      Sets Vault ClusterIssuer as the default issuer, and templates secret names as {{ Certificate Name }}-tls
+spec:
+  failurePolicy: Fail
+  rules:
+    # Set a secretName when one is not provided
+    - name: set-default-secret-name
+      match:
+        any:
+          - resources:
+              kinds:
+                - Certificate
+      mutate:
+        patchStrategicMerge:
+          spec:
+            +(secretName): "{{request.object.metadata.name}}-tls"
+    # Set Vault ClusterIssuer as the default for issuerRef fields
+    - name: set-default-issuer-ref
+      match:
+        any:
+          - resources:
+              kinds:
+                - Certificate
+      mutate:
+        patchStrategicMerge:
+          spec:
+            +(issuerRef):
+              name: vault-issuer
+              kind: ClusterIssuer
+              group: cert-manager.io
