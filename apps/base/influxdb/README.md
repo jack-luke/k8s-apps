@@ -5,6 +5,7 @@
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
+| Certificate | influxdb | [certificate.yaml](certificate.yaml) | Requests a set of TLS certificates from Cert Manager for the InfluxDB server to use. |
 | HelmRelease | influxdb | [helm.yaml](helm.yaml) | Installs InfluxDB v2. |
 | HelmRepository | influxdb | [helm.yaml](helm.yaml) | InfluxDB Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |

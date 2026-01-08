@@ -5,9 +5,11 @@ HashiCorp [Vault](https://developer.hashicorp.com/vault) and [Vault Secrets Oper
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| HelmRelease | vault | [vault-helm.yaml](vault-helm.yaml) | Installs Vault. |
-| HelmRelease | vault-secrets-operator | [secrets-operator-helm.yaml](secrets-operator-helm.yaml) |  Installs Vault Secrets Operator. |
-| HelmRepository | vault | [helm-repository.yaml](helm-repository.yaml) |  HashiCorp Helm charts. |
-| Kustomization |  | [kustomization.yaml](kustomization.yaml) | |
-| Namespace | vault | [namespace.yaml](namespace.yaml) | |
-| ServiceAccount | vault-secrets-operator-controller-manager | [secrets-operator-sa.yaml](secrets-operator-sa.yaml) | ServiceAccount for Vault Secrets Operator. |
+| HelmRelease | secrets-store-csi-driver | [secrets-store-csi-driver.yaml](secrets-store-csi-driver.yaml) | Installs the Secerts Store CSI Driver. |
+| HelmRelease | vault | [vault.yaml](vault.yaml) | Installs Vault. |
+| HelmRelease | vault-secrets-operator | [vault-secrets-operator.yaml](vault-secrets-operator.yaml) | Installs Vault Secrets Operator. |
+| HelmRepository | secrets-store-csi-driver | [helm-repository.yaml](helm-repository.yaml) | Kubernetes Secrets Store CSI Driver Helm charts. |
+| HelmRepository | vault | [helm-repository.yaml](helm-repository.yaml) | HashiCorp Helm Charts. |
+| Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
+| Namespace | vault | [namespace.yaml](namespace.yaml) |  |
+| ServiceAccount | vault-secrets-operator-controller-manager | [vault-secrets-operator.yaml](vault-secrets-operator.yaml) | ServiceAccount for Vault Secrets Operator. |
