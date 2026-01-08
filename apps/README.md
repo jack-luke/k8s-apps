@@ -129,7 +129,7 @@ spec:
 ```
 > [!NOTE]
 > The Kyverno `certificate-defaults` ClusterPolicy sets the secret name to 
-> '<AppName>-tls' if omitted, and defaults to using the 'vault-issuer' ClusterIssuer
+> '{{ AppName }}-tls' if omitted, and defaults to using the 'vault-issuer' ClusterIssuer
 
 ## Documenting Applications
 
