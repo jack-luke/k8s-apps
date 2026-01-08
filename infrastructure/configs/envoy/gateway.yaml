@@ -16,8 +16,8 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-        - kind: Secret
-          name: envoy-gateway-tls
+          - kind: Secret
+            name: gateway-listener-tls
       allowedRoutes:
         namespaces:
           from: Selector

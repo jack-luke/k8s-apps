@@ -1,17 +1,18 @@
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Issuer
 metadata:
-  name: vault-issuer
+  name: envoy-issuer
+  namespace: envoy
 spec:
   vault:
-    path: pki-int/sign/vault-cluster-issuer
+    path: pki-int/sign/envoy-issuer
     server: https://vault.vault.svc.cluster.local:8200
     serverName: vault.vault
     caBundleSecretRef:
       name: vault-server-ca
     auth:
       kubernetes:
-        role: vault-cluster-issuer
+        role: envoy-issuer
         mountPath: /v1/auth/kubernetes
         serviceAccountRef:
-          name: vault-issuer
+          name: envoy-issuer

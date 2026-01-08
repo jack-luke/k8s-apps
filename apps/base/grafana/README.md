@@ -3,8 +3,7 @@
 [Grafana](https://grafana.com/oss/grafana/?plcmt=oss-nav) hosts dashboards for visualising observability data, primarily stored in InfluxDB.
 
 Dashboards in `/dashboards` are provisioned in Grafana.
-
-Provisioned datasources are managed with Vault, due to credentials in their configuration.
+Datasources in `/datasources` are provisioned in Grafana.
 
 ## Manifests
 | Kind | Name | File | Description |
@@ -19,4 +18,4 @@ Provisioned datasources are managed with Vault, due to credentials in their conf
 | ServiceAccount | grafana | [service-account.yaml](service-account.yaml) | ServiceAccount for Grafana to use. |
 | VaultAuth | grafana | [vault-secrets.yaml](vault-secrets.yaml) | Authenticates the grafana ServiceAccount against the grafana Vault Kubernetes auth role. |
 | VaultStaticSecret | grafana-auth | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the grafana-auth Secret with Grafana admin user credentials. |
-| VaultStaticSecret | grafana-datasources | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the grafana-datasources Secret with a `datasources.yaml` file for connecting to InfluxDB and other data sources. |
+| VaultStaticSecret | influxdb-read-token | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the influxdb-read-token Secret with a token with read permissions on InfluxDB to configure its datasource.|

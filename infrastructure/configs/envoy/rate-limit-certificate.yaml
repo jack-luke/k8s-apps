@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  labels:
+    app.kubernetes.io/name: envoy-gateway
+  name: envoy-rate-limit
+  namespace: envoy
+spec:
+  commonName: "*"
+  dnsNames:
+  - "*.envoy"
+  usages:
+  - "digital signature"
+  - "data encipherment"
+  - "key encipherment"
+  - "content commitment"
+  secretName: envoy-rate-limit
+  issuerRef:
+    kind: Issuer
+    name: envoy-issuer

@@ -5,8 +5,24 @@ metadata:
 spec:
   sources:
     - secret:
-        name: vault-issuer-ca
+        name: vault-issuer-ca-bundle-source
         key: "ca.crt"
   target:
     configMap:
       key: "ca.crt"
+---
+apiVersion: trust.cert-manager.io/v1alpha1
+kind: Bundle
+metadata:
+  name: vault-server-ca
+spec:
+  sources:
+    - secret:
+        name: vault-server-ca-bundle-source
+        key: "ca.crt"
+  target:
+    secret:
+      key: "ca.crt"
+    namespaceSelector:
+      matchLabels:
+        vault-server-ca-inject: "true" 

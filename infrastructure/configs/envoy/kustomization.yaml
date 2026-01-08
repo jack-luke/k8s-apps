@@ -1,5 +1,10 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  - envoy-issuer.yaml
+  - envoy-issuer-rbac.yaml
+  - envoy-certificate.yaml
+  - gateway-certificate.yaml
+  - rate-limit-certificate.yaml
   - gateway-class.yaml
   - gateway.yaml

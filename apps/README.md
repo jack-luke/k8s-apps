@@ -125,7 +125,12 @@ spec:
   usages:
     - server auth
     - client auth
-  commonName: <AppName>
+  commonName: <AppName>.<AppNamespace>.svc.cluster.local
+  dnsNames:
+    - <AppName>
+    - <AppName>.<AppNamespace>
+    - <AppName>.<AppNamespace>.svc
+    - <AppName>.<AppNamespace>.svc.cluster.local
 ```
 > [!NOTE]
 > The Kyverno `certificate-defaults` ClusterPolicy sets the secret name to 
