@@ -112,7 +112,6 @@ the Vault ClusterIssuer:
 | --- | --- |
 | AppName | Name of the app |
 | AppNamespace | Name of the app namespace |
-| K8sSecretName | Name of the Kubernetes secret to render TLS certificates in |
 
 ```yaml
 apiVersion: cert-manager.io/v1
@@ -121,19 +120,16 @@ metadata:
   name: <AppName>
   namespace: <AppNamespace>
 spec:
-  secretName: <K8sSecretName>
   duration: 2160h # 90d
   renewBefore: 360h # 15d
-  isCA: false
   usages:
     - server auth
     - client auth
   commonName: <AppName>
-  issuerRef:
-    name: vault-issuer
-    kind: ClusterIssuer
-    group: ""
 ```
+> [!NOTE]
+> The Kyverno `certificate-defaults` ClusterPolicy sets the secret name to 
+> '<AppName>-tls' if omitted, and defaults to using the 'vault-issuer' ClusterIssuer
 
 ## Documenting Applications
 
