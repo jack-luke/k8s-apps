@@ -1,0 +1,30 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: gateway-oidc
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: api-gateway
+  oidc:
+    provider:
+      issuer: "https://vault.homelab:8200/v1/identity/oidc/provider/default"
+      backendRefs:
+        - group: gateway.envoyproxy.io
+          kind: Backend
+          name: vault-external
+          port: 8200
+    clientIDRef:
+      name: "envoy-gateway-oidc"
+    clientSecret:
+      name: "envoy-gateway-oidc"
+    redirectURL: "https://gateway.homelab/oauth2/callback"
+    logoutPath: "/logout"
+  authorization:
+    defaultAction: Deny
+    rules:
+      - action: Allow
+        principal:
+          clientCIDRs:
+            - 192.168.8.0/24

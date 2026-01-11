@@ -17,7 +17,7 @@ spec:
   driftDetection:
     mode: enabled
   values:
-    deployment:
-      annotations:
-        reloader.stakater.com/auto: "true"
-        reloader.stakater.com/rollout-strategy: "restart"
+    config:
+      envoyGateway:
+        extensionApis:
+          enableBackend: true

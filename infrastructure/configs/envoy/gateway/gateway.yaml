@@ -2,16 +2,20 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: api-gateway
-  namespace: envoy
   annotations:
     cert-manager.io/cluster-issuer: vault-issuer
-    cert-manager.io/common-name: "Homelab"
+    cert-manager.io/common-name: "gateway.homelab"
 spec:
   gatewayClassName: gateway-class
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: proxy
   listeners:
     - name: https
       protocol: HTTPS
-      hostname: rpi5-1
+      hostname: gateway.homelab
       port: 443
       tls:
         mode: Terminate

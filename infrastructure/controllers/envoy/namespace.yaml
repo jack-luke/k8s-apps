@@ -4,4 +4,7 @@ metadata:
   name: envoy
   labels:
     # Injects Vault server CA with Trust Manager to verify Vault when issuing certs
-    vault-server-ca-inject: "true" 
+    vault-server-ca-inject: "true"
+    
+    # Permits gateway to attach to routes in this namespace
+    gateway_access: "true"

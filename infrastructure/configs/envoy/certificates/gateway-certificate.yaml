@@ -1,20 +1,22 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: envoy-gateway
   labels:
     app.kubernetes.io/name: envoy-gateway
-  name: envoy
-  namespace: envoy
 spec:
-  commonName: "*"
+  commonName: envoy-gateway
   dnsNames:
-  - "*.envoy"
+  - "envoy-gateway"
+  - "envoy-gateway.envoy"
+  - "envoy-gateway.envoy.svc"
+  - "envoy-gateway.envoy.svc.cluster.local"
   usages:
   - "digital signature"
   - "data encipherment"
   - "key encipherment"
   - "content commitment"
-  secretName: envoy
+  secretName: envoy-gateway
   issuerRef:
     kind: Issuer
     name: envoy-issuer

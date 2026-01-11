@@ -47,20 +47,22 @@ spec:
               type: RuntimeDefault
       extraArgs:
         - -vault-addr="https://vault.vault.svc.cluster.local:8200"
-        - -vault-tls-server-name=vault.vault
+        - -vault-tls-server-name=vault
         - -vault-tls-ca-cert=/etc/ssl/certs/ca.crt
       volumeMounts:
-        - name: vault-ca
+        - name: vault-server-ca
           mountPath: /etc/ssl/certs/ca.crt
           subPath: ca.crt
           readOnly: true
       volumes:
-        - name: vault-ca
+        - name: vault-server-ca
           secret:
-            secretName: vault-ca
+            secretName: vault-server-ca
     server:
       service:
         type: LoadBalancer
+        annotations:
+          metallb.io/loadBalancerIPs: 192.168.8.60
       extraEnvironmentVars:
         VAULT_CACERT: /vault/userconfig/vault-server-tls/vault.ca
       volumes:
@@ -76,7 +78,8 @@ spec:
         enabled: true
         config: |
           ui = true 
-          
+          api_addr = "https://vault.homelab:8200"
+
           listener "tcp" {
             address = "[::]:8200"
             cluster_address = "[::]:8201"
@@ -90,8 +93,7 @@ spec:
           }
       resources:
         limits:
-          cpu: "100m"
-          memory: "256Mi" 
+          memory: "384Mi" 
         requests:
           cpu: "50m"
           memory: "128Mi"

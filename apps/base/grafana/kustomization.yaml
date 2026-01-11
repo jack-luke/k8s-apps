@@ -20,6 +20,7 @@ configMapGenerator:
     options:
       labels:
         grafana_dashboard: "yes"
+        
   - name: grafana-datasources
     files:
       - datasources/datasources.yaml

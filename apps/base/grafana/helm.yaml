@@ -60,11 +60,10 @@ spec:
       size: 8Gi
     resources:
       limits:
-        cpu: "200m"
-        memory: "256Mi"
+        memory: "384Mi"
       requests:
         cpu: "100m"
-        memory: "128Mi"
+        memory: "256Mi"
     sidecar:
       datasources:
         enabled: true
@@ -77,16 +76,17 @@ spec:
         searchNamespace: ["grafana"]
       resources:
         limits:
-          cpu: "250m"
           memory: "300Mi"
         requests:
           cpu: "25m"
           memory: "200Mi"
     grafana.ini:
+      auth:
+        disable_login_form: true
       server:
         serve_from_sub_path: true
-        domain: "rpi5-1"
-        root_url: "https://rpi5-1/grafana"
+        domain: "gateway.homelab"
+        root_url: "https://gateway.homelab/grafana"
         protocol: https
         cert_key: /etc/grafana/certs/tls.key
         cert_file: /etc/grafana/certs/tls.crt
