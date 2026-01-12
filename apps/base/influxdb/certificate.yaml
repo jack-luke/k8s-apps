@@ -12,7 +12,5 @@ spec:
     - client auth
   commonName: influxdb-influxdb2.influxdb.svc.cluster.local
   dnsNames:
-    - influxdb-influxdb2
-    - influxdb-influxdb2.influxdb
     - influxdb-influxdb2.influxdb.svc
     - influxdb-influxdb2.influxdb.svc.cluster.local

@@ -12,7 +12,5 @@ spec:
     - client auth
   commonName: grafana.grafana.svc.cluster.local
   dnsNames:
-    - grafana
-    - grafana.grafana
     - grafana.grafana.svc
     - grafana.grafana.svc.cluster.local

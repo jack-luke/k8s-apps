@@ -1,7 +1,7 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: proxy
+  name: proxy-config
 spec:
   provider:
     type: Kubernetes
@@ -9,3 +9,9 @@ spec:
       envoyService:
         annotations:
           metallb.io/loadBalancerIPs: 192.168.8.55
+  backendTLS:
+    # specify client certs to use for mTLS to backends
+    clientCertificateRef:
+      kind: Secret
+      name: gateway-listener-tls
+      namespace: envoy

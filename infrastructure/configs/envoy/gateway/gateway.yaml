@@ -7,11 +7,6 @@ metadata:
     cert-manager.io/common-name: "gateway.homelab"
 spec:
   gatewayClassName: gateway-class
-  infrastructure:
-    parametersRef:
-      group: gateway.envoyproxy.io
-      kind: EnvoyProxy
-      name: proxy
   listeners:
     - name: https
       protocol: HTTPS

@@ -27,9 +27,9 @@ Resources for configuring Gateways.
 | --- | --- | --- | --- |
 | Backend | vault-external | [gateway/vault-external-backend.yaml](gateway/vault-external-backend.yaml) | Backend that points to the Vault server as it can be reached from the browser. |
 | BackendTLSPolicy | vault-external | [gateway/vault-external-backend.yaml](gateway/vault-external-backend.yaml) | Configures verification of the Vault server when the SecurityPolicy contacts the OIDC provider. |
-| EnvoyProxy | proxy | [gateway/gateway-class.yaml](gateway/gateway-class.yaml) | Configures Envoy gateway resources, specifying LoadBalancer IPs to use for Gateway services. |
+| EnvoyProxy | proxy-config | [gateway/gateway-class.yaml](gateway/gateway-class.yaml) | Configures Envoy gateway resources, specifying LoadBalancer IPs to use for Gateway services, and the cert to present for mTLS. |
 | Gateway | api-gateway | [gateway/gateway.yaml](gateway/gateway.yaml) | API Gateway to handle incoming requests to the cluster. |
-| GatewayClass | gateway-class | [gateway/gateway-class.yaml](gateway/gateway-class.yaml) | Class of the API Gateway. |
+| GatewayClass | gateway-class | [gateway/gateway-class.yaml](gateway/gateway-class.yaml) | Class of the API Gateway, references the proxy-config EnvoyProxy to apply its config to all gateways of this class. |
 | HTTPRoute | homepage | [gateway/http-route.yaml](gateway/http-route.yaml) | Serves a homepage at the root path of the Gateway. |
 | HTTPRouteFilter | homepage-inline | [gateway/http-route.yaml](gateway/http-route.yaml) | Configures the response for the `homepage` HTTPRoute. |
 | SecurityPolicy | gateway-oidc | [gateway/security-policy.yaml](gateway/security-policy.yaml) | Configures OIDC authentication for the api-gateway Gateway using the Vault provider. | 
