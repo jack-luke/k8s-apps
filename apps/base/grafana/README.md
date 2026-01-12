@@ -3,7 +3,8 @@
 [Grafana](https://grafana.com/oss/grafana/?plcmt=oss-nav) hosts dashboards for visualising observability data, primarily stored in InfluxDB.
 
 Dashboards in `/dashboards` are provisioned in Grafana.
-Datasources in `/datasources` are provisioned in Grafana.
+
+Datasources are configured inline in the Helm values.
 
 ## Manifests
 | Kind | Name | File | Description |
