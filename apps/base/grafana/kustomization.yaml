@@ -10,6 +10,9 @@ resources:
   - backend-tls-policy.yaml
   - helm.yaml
 
+generatorOptions:
+ disableNameSuffixHash: true
+ 
 configMapGenerator:
   - name: grafana-dashboards
     files:
@@ -17,13 +20,3 @@ configMapGenerator:
       - dashboards/Data-Pipeline.json
       - dashboards/Docker-Logs.json
       - dashboards/Kubernetes-Logs.json
-    options:
-      labels:
-        grafana_dashboard: "yes"
-        
-  - name: grafana-datasources
-    files:
-      - datasources/datasources.yaml
-    options:
-      labels:
-        grafana_datasource: "yes"
