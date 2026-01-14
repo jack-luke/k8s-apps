@@ -6,3 +6,4 @@ resources:
   - ../base/vector
   - ../base/registry
   - ../base/reloader
+  - ../base/memcached

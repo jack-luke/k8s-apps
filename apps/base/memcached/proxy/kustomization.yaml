@@ -1,21 +1,17 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-namespace: vector
+namespace: memcached
 resources:
-  - namespace.yaml
-  - service-account.yaml
-  - cluster-role.yaml
-  - vault-secrets.yaml
   - service.yaml
   - daemonset.yaml
 
 configMapGenerator:
-  - name: vector-config
+  - name: proxy-config
     files:
-      - config/vector.yaml
+      - config.lua
 
 labels:
   - pairs:
-      app.kubernetes.io/name: vector
+      app.kubernetes.io/name: memcached-proxy
     includeSelectors: true
     includeTemplates: true

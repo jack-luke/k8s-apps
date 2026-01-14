@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: memcached-proxy
+spec:
+  template:
+    spec:
+      containers:
+        - name: proxy
+          image: memcached:alpine
+          args: ["-o", "proxy_config=routelib,proxy_arg=/etc/config.lua", "-vv"]
+          ports:
+            - containerPort: 11211
+          volumeMounts:
+            - name: proxy-config
+              mountPath: /etc/config.lua
+              subPath: config.lua
+          resources:
+            requests:
+              memory: 32Mi
+              cpu: 50m
+            limits:
+              memory: 128Mi
+          livenessProbe:
+            tcpSocket:
+              port: 11211
+            initialDelaySeconds: 5
+          readinessProbe:
+            tcpSocket:
+              port: 11211
+            initialDelaySeconds: 5
+      volumes:
+        - name: proxy-config
+          configMap:
+            name: proxy-config

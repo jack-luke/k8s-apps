@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: memcached
+spec:
+  serviceName: memcached-headless
+  replicas: 3
+  template:
+    spec:
+      containers:
+        - name: memcached
+          image: memcached:alpine
+          args: ["-m", "256", "-vv"] 
+          ports:
+            - containerPort: 11211
+          livenessProbe:
+            tcpSocket:
+              port: 11211
+            failureThreshold: 5
+          readinessProbe:
+            tcpSocket:
+              port: 11211
+          resources:
+            requests:
+              memory: 300Mi
+              cpu: 100m
+            limits:
+              memory: 400Mi

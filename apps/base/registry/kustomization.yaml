@@ -12,3 +12,4 @@ labels:
   - pairs:
       app.kubernetes.io/name: registry
     includeSelectors: true 
+    includeTemplates: true
