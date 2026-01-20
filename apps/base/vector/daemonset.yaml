@@ -11,7 +11,7 @@ spec:
       serviceAccountName: vector
       securityContext:
         runAsNonRoot: true
-        runAsUser: 1000
+        runAsUser: 100
         runAsGroup: 1000
         fsGroup: 0 # required to read /var/log/pods
         seccompProfile:
@@ -20,6 +20,7 @@ spec:
         type: RollingUpdate
         rollingUpdate:
           maxUnavailable: 0
+          maxSurge: 1
       containers:
         - name: vector
           image: timberio/vector:latest-alpine
@@ -38,23 +39,35 @@ spec:
               value: "https://influxdb-influxdb2.influxdb.svc.cluster.local:8086"
             - name: INFLUXDB_SERVER_NAME
               value: "influxdb-influxdb2.influxdb.svc.cluster.local"
+
+            - name: PROCFS_ROOT
+              value: /mnt/host/proc
+            - name: SYSFS_ROOT
+              value: /mnt/host/sys
           volumeMounts:
             - name: vector-config
               mountPath: /etc/vector/
               readOnly: true
+
             - name: vault-issuer-ca
-              mountPath: /etc/ssl/certs/
+              mountPath: /etc/ssl/certs/vault-issuer/
               readOnly: true
+            - name: vault-server-ca
+              mountPath: /etc/ssl/certs/vault-server/
+              readOnly: true
+
             - name: var-lib
               mountPath: /var/lib/vector
+
             - name: k8s-pod-logs
               mountPath: /var/log/pods
               readOnly: true
+
             - name: host-proc
-              mountPath: /proc
+              mountPath: /mnt/host/proc
               readOnly: true
             - name: host-sys
-              mountPath: /sys
+              mountPath: /mnt/host/sys
               readOnly: true
           resources:
             limits:
@@ -73,15 +86,22 @@ spec:
         - name: vector-config
           configMap:
             name: vector-config
+
         - name: vault-issuer-ca
           configMap:
             name: vault-issuer-ca
+        - name: vault-server-ca
+          secret:
+            secretName: vault-server-ca
+
         - name: var-lib
           emptyDir: {}
+
         - name: k8s-pod-logs
           hostPath:
             path: /var/log/pods
             type: Directory
+
         - name: host-proc
           hostPath:
             path: /proc

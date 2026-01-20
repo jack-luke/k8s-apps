@@ -20,3 +20,4 @@ configMapGenerator:
       - dashboards/Data-Pipeline.json
       - dashboards/Docker-Logs.json
       - dashboards/Kubernetes-Logs.json
+      - dashboards/Vault.json

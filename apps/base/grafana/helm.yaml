@@ -97,7 +97,7 @@ spec:
       size: 8Gi
     resources:
       limits:
-        memory: "384Mi"
+        memory: "512Mi"
       requests:
         cpu: "100m"
         memory: "256Mi"
