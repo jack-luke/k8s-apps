@@ -144,7 +144,7 @@ The general workflow is as follows:
 * To prevent a second authentication in Grafana, basic auth credentials are injected into the request and the login form is disabled.
 * User is served the requested resources from Grafana.
 
-<img src="./assets/oidc.svg" width=80% alt="Diagram of the workflow for OIDC authentication with Envoy Gateway and Vault" >
+<img src="./assets/oidc.svg" width=100% alt="Diagram of the workflow for OIDC authentication with Envoy Gateway and Vault" >
 
 #### Help & Resources
 * [Vault OIDC Provider Docs](https://developer.hashicorp.com/vault/docs/secrets/identity/oidc-provider)
