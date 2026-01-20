@@ -94,7 +94,7 @@ Vault PKI issuer to Trust Manager so that it can distribute them cluster-wide.
 Now the Vault server is setup with TLS, and all cluster workloads are able to 
 trust the Vault server and any certificates it issues.
 
-<center><img src="./assets/bootstrap_and_trust.svg" width=80% alt="Diagram of the workflow for setting up Vault TLS and CA trust mechanisms in the cluster" ></center>
+<img src="./assets/bootstrap_and_trust.svg" width=80% alt="Diagram of the workflow for setting up Vault TLS and CA trust mechanisms in the cluster" >
 
 #### Help & Resources
 * [Vault Standalone with TLS](https://developer.hashicorp.com/vault/docs/deploy/kubernetes/helm/examples/standalone-tls)
@@ -115,7 +115,7 @@ certificates of their neighbours.
 The diagram below shows an example of how this works with Grafana reading data 
 from InfluxDB.
 
-<center><img src="./assets/certs.svg" width=80% alt="Diagram of the workflow for issuing certificates to apps with Cert Manager and Vault" ></center>
+<img src="./assets/certs.svg" width=80% alt="Diagram of the workflow for issuing certificates to apps with Cert Manager and Vault" >
 
 #### Help & Resources
 * [Vault Tutorial: Build a CA with an offline root](https://developer.hashicorp.com/vault/tutorials/pki/pki-engine-external-ca)
@@ -144,7 +144,7 @@ The general workflow is as follows:
 * To prevent a second authentication in Grafana, basic auth credentials are injected into the request and the login form is disabled.
 * User is served the requested resources from Grafana.
 
-<center><img src="./assets/oidc.svg" width=80% alt="Diagram of the workflow for OIDC authentication with Envoy Gateway and Vault" ></center>
+<img src="./assets/oidc.svg" width=80% alt="Diagram of the workflow for OIDC authentication with Envoy Gateway and Vault" >
 
 #### Help & Resources
 * [Vault OIDC Provider Docs](https://developer.hashicorp.com/vault/docs/secrets/identity/oidc-provider)
