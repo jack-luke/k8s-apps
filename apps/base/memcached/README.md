@@ -18,7 +18,7 @@ Resources for deploying the memcached cache cluster.
 | StatefulSet | memcached | [cache/statefulset.yaml](cache/statefulset.yaml) | Memcached nodes. |
 
 ### ./proxy
-Resources for deploying the memcached proxy.
+Resources for deploying the memcached proxy. Proxy configuration is defined in `config.lua`.
 
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |

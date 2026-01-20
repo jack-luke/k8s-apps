@@ -1,0 +1,29 @@
+
+# K8s Bootstrap pipeline delivers initial certificates
+GitLab CI.K8s Boostrap.Vault Server Certs -> Kubernetes Cluster.Vault.Secrets.vault-server-tls: kubectl
+GitLab CI.K8s Boostrap.Vault Server CA Chain -> Kubernetes Cluster.Vault.Secrets.vault-server-ca: kubectl
+
+# Vault Configuration Pipeline sets up a PKI issuer, and puts its cert in KV store to simplify distribution
+GitLab CI.Vault Configuration.Vault Server CA Chain -> Kubernetes Cluster.Vault.Vault.Key-Value Store
+
+Kubernetes Cluster {
+
+    Vault {
+        # VSO reads secrets from Vault
+        Vault -> Vault Secrets Operator
+
+        Vault.PKI Root/Intermediate
+
+        Secrets.vault-server-ca -> Vault Secrets Operator: Verify Vault Cert {
+           style.stroke-dash: 3
+        }
+        Secrets.vault-server-tls -> Vault: Server TLS
+    }
+
+    # Vault Secrets Operator delivers CA bundles to Trust Manager as 
+    # VaultStaticSecrets so it may distribute them to the required cluster workloads
+    Vault.Vault Secrets Operator -> Trust Manager.Secrets.vault-issuer-ca-bundle-source: VaultStaticSecret
+    Vault.Vault Secrets Operator -> Trust Manager.Secrets.vault-server-ca-bundle-source: VaultStaticSecret    
+}
+
+

@@ -1,0 +1,40 @@
+Vault {
+    Secrets.vault-server-tls -> Vault: Server TLS
+}
+
+# Trust Manager distributes Vault Server CA to Cert Manager, so the Vault 
+# Cluster Issuer can verify the Vault server when getting it to sign 
+# certificates with the PKI secrets engine
+Trust Manager.Secrets.vault-server-ca-bundle-source -> Cert Manager.Secrets.vault-server-ca: Bundle
+
+# Cert Manager creates a ClusterIssuer that verifies the Vault server with
+# the CA secret
+Cert Manager {
+    Secrets.vault-server-ca -> ClusterIssuer.vault-issuer: Verify Vault Cert {
+        style.stroke-dash: 3
+    }
+}
+
+# The ClusterIssuer uses Vault to sign certificates.
+Vault.Vault.PKI Intermediate <-> Cert Manager.ClusterIssuer.vault-issuer: Certificate Sign
+
+# Issue certificates to InfluxDB and Grafana
+Cert Manager.ClusterIssuer.vault-issuer -> InfluxDB.Secrets.influxdb-tls: Certificate Issue
+Cert Manager.ClusterIssuer.vault-issuer -> Grafana.Secrets.grafana-tls: Certificate Issue
+
+# Trust Manager distributes cert to verify Vault PKI issuer to relevant namespaces
+Trust Manager.Secrets.vault-issuer-ca-bundle-source -> Grafana.ConfigMaps.vault-issuer-ca: Bundle
+
+# InfluxDB and Grafana now both serve over TLS and can verify each-others certs for secure communications.
+
+InfluxDB {
+    Secrets.influxdb-tls -> InfluxDB: Server TLS
+}
+
+Grafana {
+    ConfigMaps.vault-issuer-ca -> Grafana: Verify InfluxDB Cert {
+        style.stroke-dash: 3
+    }
+    Secrets.grafana-tls -> Grafana: Server TLS
+}
+Grafana.Grafana -> InfluxDB.InfluxDB: Read Data

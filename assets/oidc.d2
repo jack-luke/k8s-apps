@@ -1,0 +1,57 @@
+
+# Browser sends requests to Gateway, and is redirected to Vault UI
+Browser <-> Kubernetes Cluster.Envoy.Gateway: Request & Redirect
+
+# User logs in to Vault UI, which calls back to the Gateway upon success
+Browser <-> Vault Exposed Port: OIDC Auth & Callback
+
+Kubernetes Cluster {
+
+    # SecurityPolicy forwards authenticated requests to destination
+    Envoy.SecurityPolicy -> Grafana.HTTPRoute: Forward Authed Requests
+
+    Envoy {
+        Secrets.gateway-listener-tls -> Gateway: Server TLS
+        
+        # SecurityPolicy targets the Gateway, so all requests to the Gateway must comply
+        Gateway -> SecurityPolicy
+
+        # OIDC client credentials are supplied to the SecurityPolicy via VaultStaticSecrets
+        Secrets.envoy-gateway-oidc -> SecurityPolicy: OIDC Credentials
+
+        # SecurityPolicy verifies the Vault server using its own Backend resources
+        SecurityPolicy-> Vault BackendTLSPolicy: Verify OIDC Provider
+        Vault BackendTLSPolicy -> Vault External Backend
+        ConfigMaps.vault-server-ca -> Vault BackendTLSPolicy: Verify Vault Cert  {
+           style.stroke-dash: 3
+        }
+    }
+    Vault {
+        Secrets.vault-server-tls -> Service: Server TLS
+
+        # Vault hosts the OIDC provider
+        Service <-> OIDC Provider
+    }
+    Grafana {
+        # HTTPRouteFilter is used to apply credetial injection on backend requests, preventing a second auth
+        HTTPRoute -> HTTPRouteFilter
+        HTTPRouteFilter -> BackendTLSPolicy: Inject Credentials
+        BackendTLSPolicy -> Service
+
+        # HTTPRouteFilter obtains basic auth credentials from VaultStaticSecret
+        Secrets.grafana-basic-auth -> HTTPRouteFilter: Basic Auth
+
+        Secrets.grafana-tls -> Service: Server TLS
+        ConfigMaps.vault-issuer-ca -> BackendTLSPolicy: Verify Grafana Cert  {
+            style.stroke-dash: 3
+        }
+    }
+}
+
+# The SecurityPolicy verifies the Vault server via its external port
+Kubernetes Cluster.Envoy.Vault External Backend -> Vault Exposed Port: Verify OIDC Provider
+
+# Vault server is exposed externally
+Vault Exposed Port -> Kubernetes Cluster.Vault.Service
+
+Kubernetes Cluster.Grafana # Formatting: re-defining here moves Grafana to right side
