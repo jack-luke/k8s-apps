@@ -5,7 +5,7 @@
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| HelmRelease | envoy-gateway | [envoy-gateway.yaml](envoy-gateway.yaml) | Installs Envoy Gateway. |
+| HelmRelease | envoy-gateway | [helm-release.yaml](helm-release.yaml) | Installs Envoy Gateway. |
 | HelmRepository | envoy-gateway | [helm-repository.yaml](helm-repository.yaml) | Envoy Gateway Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) | |
 | Namespace | envoy | [namespace.yaml](namespace.yaml) |  |

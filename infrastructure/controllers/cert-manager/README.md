@@ -5,8 +5,8 @@
 ## Manifests
 | Kind | Name | File | Description|
 | --- | --- | --- | --- |
-| HelmRelease | cert-manager | [cert-manager.yaml](cert-manager.yaml) | Installs Cert Manager. | 
-| HelmRelease | trust-manager | [trust-manager.yaml](trust-manager.yaml) | Installs Trust Manager. |
+| HelmRelease | cert-manager | [cert-manager-helm-release.yaml](cert-manager-helm-release.yaml) | Installs Cert Manager. | 
+| HelmRelease | trust-manager | [trust-manager-helm-release.yaml](trust-manager-helm-release.yaml) | Installs Trust Manager. |
 | HelmRepository | jetstack | [helm-repository.yaml](helm-repository.yaml) | Jetstack Helm Charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) | |
 | Namespace | cert-manager | [namespace.yaml](namespace.yaml) | |

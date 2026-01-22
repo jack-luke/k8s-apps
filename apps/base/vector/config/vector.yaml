@@ -109,7 +109,7 @@ transforms:
         .name = join!(slice!(elements, 0, -2), ".")
       }
 
-      # handle "vault.token.creation.<namespace>.<auth_method>.<mount_point>.<creation_ttl>.<token_type>.<cluster>
+      # handle "vault.token.creation.<namespace>.<auth_method>.<mount_point>.<creation_ttl>.<token_type>.<cluster>""
       if starts_with(.name, "vault.token.creation.") {
         elements = split(.name, ".")
 
@@ -119,6 +119,16 @@ transforms:
         .tags.token_type = elements[7]
 
         .name = "vault.token.creation"
+      }
+
+      # handle "vault.core.response_status_code.<status_code>.<code_prefix>"
+      if starts_with(.name, "vault.core.response_status_code.") {
+        elements = split(.name, ".")
+
+        .tags.status_code = elements[3]
+        .tags.code_prefix = elements[4]
+
+        .name = "vault.core.response_status_code"
       }
 
   smart_home_router:

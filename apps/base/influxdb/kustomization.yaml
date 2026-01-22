@@ -5,4 +5,5 @@ resources:
   - namespace.yaml
   - vault-secrets.yaml
   - certificate.yaml
-  - helm.yaml
+  - helm-repository.yaml
+  - helm-release.yaml

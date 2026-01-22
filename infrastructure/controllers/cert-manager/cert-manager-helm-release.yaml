@@ -26,24 +26,21 @@ spec:
       enableGatewayAPI: true
     resources:
       limits:
-        cpu: "100m"
-        memory: "128Mi" 
+        memory: "256Mi" 
       requests:
         cpu: "50m"
-        memory: "64Mi"
+        memory: "128Mi"
     webhook:
       resources:
         limits:
-          cpu: "50m"
           memory: "128Mi" 
         requests:
-          cpu: "10m"
+          cpu: "25m"
           memory: "64Mi"
     cainjector:
       resources:
         limits:
-          cpu: "50m"
           memory: "128Mi" 
         requests:
-          cpu: "10m"
+          cpu: "25m"
           memory: "64Mi"

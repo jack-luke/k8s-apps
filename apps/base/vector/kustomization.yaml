@@ -13,6 +13,9 @@ configMapGenerator:
   - name: vector-config
     files:
       - config/vector.yaml
+      
+generatorOptions:
+  disableNameSuffixHash: true
 
 labels:
   - pairs:

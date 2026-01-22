@@ -6,7 +6,7 @@ cluster security configurations.
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| HelmRelease | kyverno | [kyverno.yaml](kyverno.yaml) | Installs Kyverno. |
+| HelmRelease | kyverno | [helm-release.yaml](helm-release.yaml) | Installs Kyverno. |
 | HelmRepository | kyverno | [helm-repository.yaml](helm-repository.yaml) | Kyverno Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | kyverno | [namespace.yaml](namespace.yaml) |  |

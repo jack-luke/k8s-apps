@@ -3,15 +3,12 @@ kind: Kustomization
 namespace: grafana
 resources:
   - namespace.yaml
-  - service-account.yaml
   - certificate.yaml
   - vault-secrets.yaml
   - http-route.yaml
   - backend-tls-policy.yaml
-  - helm.yaml
-
-generatorOptions:
- disableNameSuffixHash: true
+  - helm-repository.yaml
+  - helm-release.yaml
  
 configMapGenerator:
   - name: grafana-dashboards
@@ -21,3 +18,6 @@ configMapGenerator:
       - dashboards/Docker-Logs.json
       - dashboards/Kubernetes-Logs.json
       - dashboards/Vault.json
+
+generatorOptions:
+  disableNameSuffixHash: true

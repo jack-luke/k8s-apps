@@ -7,11 +7,11 @@ resources:
   - gateway/gateway.yaml
   - gateway/http-route.yaml
   - gateway/security-policy.yaml
-  - gateway/vault-external-backend.yaml
+  - gateway/backend.yaml
   - gateway/vault-secrets.yaml
   
   - certificates/envoy-certificate.yaml
-  - certificates/envoy-issuer-rbac.yaml
-  - certificates/envoy-issuer.yaml
+  - certificates/issuer-rbac.yaml
+  - certificates/issuer.yaml
   - certificates/gateway-certificate.yaml
   - certificates/rate-limit-certificate.yaml

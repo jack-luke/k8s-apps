@@ -8,7 +8,7 @@ resources:
 configMapGenerator:
   - name: proxy-config
     files:
-      - config.lua
+      - ./config/config.lua
 
 labels:
   - pairs:

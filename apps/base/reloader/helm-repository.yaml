@@ -1,8 +1,8 @@
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: vault
-  namespace: vault
+  name: stakater
+  namespace: reloader
 spec:
   interval: 24h
-  url: https://helm.releases.hashicorp.com
+  url: https://stakater.github.io/stakater-charts

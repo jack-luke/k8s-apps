@@ -5,7 +5,7 @@
 ## Manifests
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
-| HelmRelease | reloader | [helm.yaml](helm.yaml) | Installs Reloader. |
-| HelmRepository | stakater | [helm.yaml](helm.yaml) | Stakater Helm charts. |
+| HelmRelease | reloader | [helm-release.yaml](helm-release.yaml) | Installs Reloader. |
+| HelmRepository | stakater | [helm-repository.yaml](helm-repository.yaml) | Stakater Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | reloader | [namespace.yaml](namespace.yaml) |  |

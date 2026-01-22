@@ -3,5 +3,5 @@ kind: Kustomization
 resources:  
   - cluster-issuer-rbac.yaml
   - cluster-issuer.yaml
-  - trust-bundle.yaml
-  - trust-manager-vault-secrets.yaml
+  - bundle.yaml
+  - vault-secrets.yaml

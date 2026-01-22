@@ -6,8 +6,8 @@
 | Kind | Name | File | Description |
 | --- | --- | --- | --- |
 | Certificate | influxdb | [certificate.yaml](certificate.yaml) | Requests a set of TLS certificates from Cert Manager for the InfluxDB server to use. |
-| HelmRelease | influxdb | [helm.yaml](helm.yaml) | Installs InfluxDB v2. |
-| HelmRepository | influxdb | [helm.yaml](helm.yaml) | InfluxDB Helm charts. |
+| HelmRelease | influxdb | [helm-release.yaml](helm-release.yaml) | Installs InfluxDB v2. |
+| HelmRepository | influxdb | [helm-repository.yaml](helm-repository.yaml) | InfluxDB Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | influxdb | [namespace.yaml](namespace.yaml) |  |
 | VaultAuth | influxdb | [vault-secrets.yaml](vault-secrets.yaml) | Authenticates the inflxudb ServiceAccount against the inflxudb Vault Kubernetes auth role. |

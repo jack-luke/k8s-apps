@@ -21,8 +21,8 @@ spec:
             tcpSocket:
               port: 11211
           resources:
-            requests:
-              memory: 300Mi
-              cpu: 100m
             limits:
-              memory: 400Mi
+              memory: "400Mi"
+            requests:
+              cpu: "100m"
+              memory: "300Mi"

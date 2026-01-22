@@ -44,13 +44,14 @@ spec:
 ```
 
 ### Infrastructure
-`/infrastructure/controllers` contains the `infra-controllers` Kustomization and resources to
-install the infrastructure service and any CRDs it utilises. 
+`/infrastructure/controllers` contains the `infra-controllers` Kustomization 
+and resources to install the infrastructure service and any CRDs it utilises. 
 Depends on the `policies` Kustomization, to ensure that all policy rules are in
 place prior to installing these resources.
 
-`/infrastructure/configs` contains the `infra-configs` Kustomization and resources to configure
-infrastructure services, such as Gateways, ClusterIssuers etc. 
+`/infrastructure/configs` contains the `infra-configs` Kustomization and 
+resources to configure infrastructure services, such as Gateways, 
+ClusterIssuers etc. 
 Depends on the `infra-controllers` Kustomization to ensure that all CRDs 
 are installed prior to installing these resources.
 
