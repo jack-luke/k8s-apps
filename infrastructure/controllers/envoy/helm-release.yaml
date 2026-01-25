@@ -21,3 +21,7 @@ spec:
       envoyGateway:
         extensionApis:
           enableBackend: true
+    deployment:
+      annotations:
+        reloader.stakater.com/auto: "true"
+        reloader.stakater.com/rollout-strategy: "restart"

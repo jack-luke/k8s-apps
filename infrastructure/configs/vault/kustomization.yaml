@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: vault
+resources:
+  - vault-network-policy.yaml
+  - vault-secrets-operator-network-policy.yaml

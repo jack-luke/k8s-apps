@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: grafana
+spec:
+  podSelector: {} 
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow serving connections from Envoy Gateway
+    - from:
+        - podSelector:
+            matchLabels:
+              gateway.envoyproxy.io/owning-gateway-name: api-gateway
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy
+      ports:
+        - port: 3000
+          protocol: TCP
+  egress:
+    # Allow reading from InfluxDB datasource
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: influxdb2
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: influxdb
+      ports:
+        - port: 8086
+          protocol: TCP
+    # Allow DNS resolution
+    - ports:
+        - port: 53
+          protocol: UDP

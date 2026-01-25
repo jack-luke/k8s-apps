@@ -9,6 +9,11 @@ spec:
       envoyService:
         annotations:
           metallb.io/loadBalancerIPs: 192.168.8.55
+      envoyDeployment:
+        pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+            reloader.stakater.com/rollout-strategy: "restart"
   backendTLS:
     # specify client certs to use for mTLS to backends
     clientCertificateRef:

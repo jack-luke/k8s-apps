@@ -9,6 +9,7 @@ resources:
   - gateway/security-policy.yaml
   - gateway/backend.yaml
   - gateway/vault-secrets.yaml
+  - gateway/network-policy.yaml
   
   - certificates/envoy-certificate.yaml
   - certificates/issuer-rbac.yaml

@@ -8,6 +8,7 @@ resources:
   - vault-secrets.yaml
   - service.yaml
   - daemonset.yaml
+  - network-policy.yaml
 
 configMapGenerator:
   - name: vector-config

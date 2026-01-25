@@ -5,3 +5,4 @@ resources:
   - cluster-issuer.yaml
   - bundle.yaml
   - vault-secrets.yaml
+  - network-policy.yaml

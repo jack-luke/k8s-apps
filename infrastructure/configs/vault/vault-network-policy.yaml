@@ -1,0 +1,68 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: vault
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: vault
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow cluster LAN devices to connect externally
+    - from:
+        - ipBlock:
+            cidr: 192.168.8.0/24
+      ports:
+        - port: 8200
+          protocol: TCP
+    # Allow Cert Manager sign certificates
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: cert-manager
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: cert-manager
+      ports:
+        - port: 8200
+          protocol: TCP
+    # Allow Vault Secrets Operator to read secrets
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: vault-secrets-operator
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vault
+      ports:
+        - port: 8200
+          protocol: TCP
+    # Allow Envoy Gateway to connect for OIDC auth
+    - from:
+        - podSelector:
+            matchLabels:
+              gateway.envoyproxy.io/owning-gateway-name: api-gateway
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy
+      ports:
+        - port: 8200
+          protocol: TCP
+  egress:
+    # Allow sending StatsD metrics to Vector
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: vector
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vector
+      ports:
+        - port: 9000
+          protocol: UDP
+    # Allow DNS resolution
+    - ports:
+        - port: 53
+          protocol: UDP
