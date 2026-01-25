@@ -51,6 +51,13 @@ spec:
         - port: 8200
           protocol: TCP
   egress:
+    # Allow Kubernetes API server access to verify pod ServiceAccount tokens
+    - to:
+        - ipBlock:
+            cidr: 192.168.8.0/24
+      ports:
+        - port: 6443
+          protocol: TCP
     # Allow sending StatsD metrics to Vector
     - to:
         - podSelector:

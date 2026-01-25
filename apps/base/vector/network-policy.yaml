@@ -19,6 +19,13 @@ spec:
       ports:
         - port: 9000
           protocol: UDP
+    # Allow other Vector instances to forward events
+    - from:
+        - ipBlock:
+            cidr: 10.10.10.10/32
+      ports:
+        - port: 8222
+          protocol: TCP
   egress:
     # Allow writing data to InfluxDB
     - to:
