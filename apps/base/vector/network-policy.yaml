@@ -20,10 +20,7 @@ spec:
         - port: 9000
           protocol: UDP
     # Allow other Vector instances to forward events
-    - from:
-        - ipBlock:
-            cidr: 10.10.10.10/32
-      ports:
+    - ports:
         - port: 8222
           protocol: TCP
   egress:
@@ -37,6 +34,24 @@ spec:
               kubernetes.io/metadata.name: influxdb
       ports:
         - port: 8086
+          protocol: TCP
+    # Allow requesting secrets from Vault via Vault Agent Injector
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: vault
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vault
+      ports:
+        - port: 8200
+          protocol: TCP
+    # Allow Kubernetes API server access for pod log metadata
+    - to:
+        - ipBlock:
+            cidr: 192.168.8.0/24
+      ports:
+        - port: 6443
           protocol: TCP
     # Allow DNS resolution
     - ports:

@@ -24,13 +24,13 @@ sources:
     node_annotation_fields:
       node_labels: ""
 
-  smart_home:
+  vector_forwarded:
     type: vector
-    address: 0.0.0.0:8222
+    address: 0.0.0.0:${VECTOR_SERVICE_PORT_FORWARDING}
 
   vault_metrics:
     type: statsd
-    address: 0.0.0.0:9000
+    address: 0.0.0.0:${VECTOR_SERVICE_PORT_STATSD}
     mode: udp
 
   thermal:
@@ -43,8 +43,8 @@ sources:
       codec: bytes
 
 transforms:
+  # Convert temps to ˚C
   format_thermal:
-    # truncate all but first 2 characters, and convert to int
     type: remap
     inputs:
       - thermal
@@ -65,8 +65,8 @@ transforms:
         tags:
           node: "{{node}}"
 
+  # Cleanup host metrics
   tag_host_metrics: 
-    # Cleanup host metrics
     type: remap
     inputs: 
       - host_metrics
@@ -79,8 +79,8 @@ transforms:
 
       .tags.node_name = "$VECTOR_SELF_NODE_NAME"
 
+  # Remap Vault metrics in StatsD format with tags appended to metric names
   remap_vault_metrics: 
-    # Remap Vault metrics
     type: remap
     inputs: 
       - vault_metrics
@@ -131,17 +131,17 @@ transforms:
         .name = "vault.core.response_status_code"
       }
 
-  smart_home_router:
-    # Route logs from smart home by type
+  # Route events from external Vector instances by type
+  vector_forwarded_router:
     type: route
     inputs:
-      - smart_home
+      - vector_forwarded
     route:
       metrics: "!exists(.log)"
       logs: exists(.log)
 
+  # Sanitise all k8s logs before further processing
   remap_k8s_logs:
-    # Sanitise all k8s logs before further processing
     type: remap
     inputs:
       - kubernetes_logs
@@ -162,25 +162,25 @@ transforms:
       del(.stream)
       del(.file)
       
+  # Route k8s logs by format or application
   k8s_log_router:
-    # Route k8s logs by format or application
     type: route
     inputs:
       - remap_k8s_logs
     route:
-      klog: includes(["metrics-server", "local-path-provisioner", "cert-manager-controller", "cert-manager-cainjector", "cert-manager-webhook", "node-driver-registrar", "secrets-store"], .container)
-      json: includes(["grafana-sc-datasources", "grafana-sc-dashboard", "notifications-controller"], .container)
-      key_value: includes(["grafana", "influxdb2", "registry", "application-controller", "applicationset-controller", "repo-server", "server", "trust-manager", "reloader-reloader"], .container)
-      vault: includes(["vault", "sidecar-injector", "vault-csi-provider", "vault-agent", "vault-agent-init"], .container)
-      vault-secrets-operator: .app == "vault-secrets-operator"
-      envoy: .container == "envoy"
+      klog: |
+        includes(["metrics-server", "local-path-provisioner"], .container) || 
+        .namespace == "cert-manager"
+      json: |
+        includes(["kyverno", "flux-system"], .namespace) ||
+        includes(["vault-secrets-operator", "trust-manager", "reloader", "metallb"], .app)
+      key_value: includes(["influxdb2", "grafana", "registry"], .app)
+      vault: includes(["vault", "sidecar-injector", "vault-agent", "vault-agent-init"], .container)
+      envoy_proxy: .app == "envoy"
       envoy_gateway: .container == "envoy-gateway"
-      flux: .namespace == "flux-system"
-      kyverno: .namespace == "kyverno"
 
-
+  # Kubernetes internal components, see: https://github.com/kubernetes/klog
   parse_klog:
-    # Parser for Kubernetes internal components
     type: remap
     inputs:
       - k8s_log_router.klog
@@ -193,26 +193,13 @@ transforms:
 
         # FORMAT: '<message> <other=fields>, ...'
         .message = join([del(parsed.message), encode_logfmt(parsed)], " ") ?? .message
-
-      } else {
-        log(
-          {
-            "message": "Error parsing event as klog",
-            "event": .message,
-            "error": err, 
-            "source_app": .app,
-            "source_container": .container,
-            "source_namespace": .namespace
-          },
-          level: "warn"
-        )
       }
 
+  # Parse events from key-value format
+  # Standalone keys are valid, so most space-separated logs will parse without error.
+  # Encoding to logfmt alphabetises fields, so words in logs may be ordered incorrectly.
+  # So, only use this parser where it is relatively certain events will be in key-value or logfmt format.
   parse_key_value:
-    # Parse events from key-value format
-    # As standalone keys are accepted, most space-separated strings will be parsed without error.
-    # Encoding them back into logfmt alphabetises the fields, meaning these strings often return scrambled.
-    # So, only use this parser where it is relatively certain events will be in key-value or logfmt format.
     type: remap
     inputs:
       - k8s_log_router.key_value
@@ -222,34 +209,17 @@ transforms:
       if err == null {
         .timestamp = del(parsed.timestamp) || del(parsed.time) || del(parsed.ts) || del(parsed.t) || .timestamp
         .level = del(parsed.level) || del(parsed.lvl)
+        message = del(parsed.message) || del(parsed.msg) || ""
 
         # FORMAT: '<message> <other=fields>, ...'
-        message = del(parsed.message) || del(parsed.msg) || ""
         message = join([to_string!(message), encode_logfmt(parsed)], " ") ?? .message
         .message = strip_whitespace!(message)
-
-      } else {
-        log(
-          {
-            "message": "Error parsing event as key-value",
-            "event": .message,
-            "error": err, 
-            "source_app": .app,
-            "source_container": .container,
-            "source_namespace": .namespace
-          },
-          level: "warn"
-        )
       }
 
   parse_json:
-    # Parse events from JSON format
     type: remap
     inputs:
       - k8s_log_router.json
-      - k8s_log_router.flux
-      - k8s_log_router.vault-secrets-operator
-      - k8s_log_router.kyverno
     source: |
       # The 'message' field is always a string from stdout, so this always succeeds
       message_string = to_string(.message) ?? "" 
@@ -261,48 +231,21 @@ transforms:
         if err == null {
           .timestamp = del(parsed.timestamp) || del(parsed.time) || del(parsed.ts) || del(parsed.t) || .timestamp
           .level = del(parsed.level) || del(parsed.lvl)
+          message = del(parsed.message) || del(parsed.msg) || ""
 
           # FORMAT: '<message> <other=fields>, ...'
-          message = del(parsed.message) || del(parsed.msg) || ""
           message = join([to_string!(message), encode_logfmt!(parsed)], " ") ?? .messsage
           .message = strip_whitespace!(message)
-
-        } else {
-          log(
-            {
-              "message": "Error parsing event as JSON", 
-              "error": err,
-              "event": .message,
-              "source_app": .app,
-              "source_container": .container,
-              "source_namespace": .namespace
-            }, 
-            level: "warn"
-          )
         }
-      } else {
-        log(
-          {
-            "message": "Event is not valid JSON", 
-            "event": .message,
-            "source_app": .app,
-            "source_container": .container,
-            "source_namespace": .namespace
-          }, 
-          level: "warn"
-        )
       }
 
+  # HashiCorp format, see: https://support.hashicorp.com/hc/en-us/articles/360000995548-Audit-and-Operational-Log-Details#:~:text=Vault%20Operational%20Log%20Details
   parse_vault:
-    # parse HashiCorp format, or klog in case of unhandled errors
-    # https://support.hashicorp.com/hc/en-us/articles/360000995548-Audit-and-Operational-Log-Details#:~:text=Vault%20Operational%20Log%20Details
     type: remap
     inputs:
       - k8s_log_router.vault
     source: |
-      parsed, err = 
-        parse_grok(.message, s'%{TIMESTAMP_ISO8601:timestamp} \[%{LOGLEVEL:level}\]\s+%{GREEDYDATA:message}') ??
-        parse_klog(.message)
+      parsed, err = parse_grok(.message, s'%{TIMESTAMP_ISO8601:timestamp} \[%{LOGLEVEL:level}\]\s+%{GREEDYDATA:message}')
 
       if err == null {
         .timestamp = del(parsed.timestamp) || .timestamp
@@ -311,35 +254,20 @@ transforms:
 
         # FORMAT: '<message> <other=fields>, ...'
         .message = join([to_string!(message), encode_logfmt(parsed)], " ") ?? .message
-      } else {
-        log(
-          {
-            "message": "Error parsing Vault event",
-            "event": .message,
-            "error": err, 
-            "source_app": .app,
-            "source_container": .container,
-            "source_namespace": .namespace
-          },
-          level: "warn"
-        )
       }
 
-  parse_envoy:
-    # Parser for Envoy Gateway access log format:
-    # https://gateway.envoyproxy.io/docs/tasks/observability/proxy-accesslog/#default-access-log
+  # Envoy Proxy pod logs
+  parse_envoy_proxy:
     type: remap
     inputs:
-      - k8s_log_router.envoy
+      - k8s_log_router.envoy_proxy
     source: |
       parsed = parse_json(.message) ?? {}
 
-      # derive log level from response code if it exists
       if exists(parsed.response_code) {
         .level = "INFO"
         
         parsed.response_code = int!(parsed.response_code)
-
         if parsed.response_code >= 500 {
           .level = "ERROR"
         } else if parsed.response_code >= 400 {
@@ -347,9 +275,8 @@ transforms:
         }
       }
 
+  # Envoy Gateway access logs, see: https://gateway.envoyproxy.io/docs/tasks/observability/proxy-accesslog/#default-access-log
   parse_envoy_gateway:
-    # Parser for Envoy Gateway access log format:
-    # https://gateway.envoyproxy.io/docs/tasks/observability/proxy-accesslog/#default-access-log
     type: remap
     inputs:
       - k8s_log_router.envoy_gateway
@@ -363,22 +290,9 @@ transforms:
 
         # FORMAT: '<message> <other=fields>, ...'
         .message = join([to_string!(message), encode_logfmt(parsed)], " ") ?? .message
-      } else {
-        log(
-          {
-            "message": "Error parsing Envoy Gateway event",
-            "event": .message,
-            "error": err, 
-            "source_app": .app,
-            "source_container": .container,
-            "source_namespace": .namespace
-          },
-          level: "warn"
-        )
       }
 
   parse_vector:
-    # Parse Vector internal logs
     type: remap
     inputs:
       - internal_logs
@@ -401,8 +315,13 @@ transforms:
 
       # FORMAT: <message> <other>=<fields>...
       output.message = join!([to_string!(del(.message)), encode_logfmt(compact(.))], " ")
-
       . = output
+
+secret:
+  # InfluxDB write token provided by Vault Agent Injector
+  influxdb:
+    type: file
+    path: /vault/secrets/influxdb-token
 
 sinks:
   metrics:
@@ -411,26 +330,20 @@ sinks:
       - internal_metrics
       - tag_host_metrics
       - thermal_to_metric
-      - smart_home_router.metrics
+      - vector_forwarded_router.metrics
       - remap_vault_metrics
     endpoint: ${INFLUXDB_ADDR}
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
-    batch:
-      max_events: 2500
-    buffer:
-      max_events: 25000
-    request:
-      retry_attempts: 5
     tls:
       server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: /etc/ssl/certs/vault-issuer/ca.crt
+      ca_file: ${INFLUXDB_CA_FILE}
       verify_certificate: true
       verify_hostname: true
 
+  # Kubernetes pod logs
   logs:
-    # Kubernetes pod logs
     type: influxdb_logs
     measurement: k8s_logs
     inputs: 
@@ -440,39 +353,27 @@ sinks:
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
-    batch:
-      max_events: 1000
-    buffer:
-      max_events: 10000
     tags: [level, container, namespace, app, node]
-    request:
-      retry_attempts: 5
     tls:
       server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: /etc/ssl/certs/vault-issuer/ca.crt
+      ca_file: ${INFLUXDB_CA_FILE}
       verify_certificate: true
       verify_hostname: true
 
+  # Logs forwarded from other Vector instances
   docker_logs:
-    # Logs from the smart home Docker containers
     type: influxdb_logs
     measurement: docker_logs
     inputs: 
-      - smart_home_router.logs
-      - smart_home_router._unmatched
+      - vector_forwarded_router.logs
+      - vector_forwarded_router._unmatched
     endpoint: ${INFLUXDB_ADDR}
     bucket: data
     org: homelab
     token: ${INFLUXDB_TOKEN}
-    batch:
-      max_events: 1000
-    buffer:
-      max_events: 10000
     tags: [level, container, node, tag]
-    request:
-      retry_attempts: 5
     tls:
       server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: /etc/ssl/certs/vault-issuer/ca.crt
+      ca_file: ${INFLUXDB_CA_FILE}
       verify_certificate: true
       verify_hostname: true

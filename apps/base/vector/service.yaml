@@ -5,10 +5,9 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - name: vector-forwarding
+    - name: forwarding
       protocol: TCP
       port: 8222
-      targetPort: 8222
       nodePort: 32004
     - name: statsd
       protocol: UDP

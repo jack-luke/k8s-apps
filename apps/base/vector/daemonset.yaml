@@ -9,41 +9,35 @@ spec:
   template:
     spec:
       serviceAccountName: vector
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 100
-        runAsGroup: 1000
-        fsGroup: 0 # required to read /var/log/pods
-        seccompProfile:
-          type: RuntimeDefault
-      updateStrategy:
-        type: RollingUpdate
-        rollingUpdate:
-          maxUnavailable: 0
-          maxSurge: 1
       containers:
         - name: vector
           image: timberio/vector:latest-alpine
           imagePullPolicy: Always
           ports:
             - containerPort: 8222
+              name: forwarding
+            - containerPort: 9000
+              name: statsd
           envFrom:
             - secretRef:
                 name: influxdb-write-token
           env:
-            - name: VECTOR_SELF_NODE_NAME
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.nodeName
-            - name: INFLUXDB_ADDR
-              value: "https://influxdb-influxdb2.influxdb.svc.cluster.local:8086"
             - name: INFLUXDB_SERVER_NAME
               value: "influxdb-influxdb2.influxdb.svc.cluster.local"
+            - name: INFLUXDB_ADDR
+              value: "https://$(INFLUXDB_SERVER_NAME):8086"
+            - name: INFLUXDB_CA_FILE
+              value: "/etc/ssl/certs/vault-issuer/ca.crt"
 
             - name: PROCFS_ROOT
               value: /mnt/host/proc
             - name: SYSFS_ROOT
               value: /mnt/host/sys
+
+            - name: VECTOR_SELF_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           volumeMounts:
             - name: vector-config
               mountPath: /etc/vector/
@@ -109,3 +103,10 @@ spec:
           hostPath:
             path: /sys
             type: Directory
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 100
+        runAsGroup: 1000
+        fsGroup: 0 # required to read /var/log/pods
+        seccompProfile:
+          type: RuntimeDefault

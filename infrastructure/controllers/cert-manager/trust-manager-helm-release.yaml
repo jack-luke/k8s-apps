@@ -25,6 +25,7 @@ spec:
     app:
       trust:
         namespace: trust-manager
+      logFormat: json
     resources:
       limits:
         memory: "128Mi" 
