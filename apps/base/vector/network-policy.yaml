@@ -35,17 +35,6 @@ spec:
       ports:
         - port: 8086
           protocol: TCP
-    # Allow requesting secrets from Vault via Vault Agent Injector
-    - to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: vault
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: vault
-      ports:
-        - port: 8200
-          protocol: TCP
     # Allow Kubernetes API server access for pod log metadata
     - to:
         - ipBlock:
