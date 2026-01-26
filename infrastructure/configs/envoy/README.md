@@ -32,6 +32,7 @@ Resources for configuring Gateways.
 | GatewayClass | gateway-class | [gateway/gateway-class.yaml](gateway/gateway-class.yaml) | Class of the API Gateway, references the proxy-config EnvoyProxy to apply its config to all gateways of this class. |
 | HTTPRoute | homepage | [gateway/http-route.yaml](gateway/http-route.yaml) | Serves a homepage at the root path of the Gateway. |
 | HTTPRouteFilter | homepage-inline | [gateway/http-route.yaml](gateway/http-route.yaml) | Configures the response for the `homepage` HTTPRoute. |
+| NetworkPolicy | envoy-gateway | [gateway/network-policy.yaml](gateway/network-policy.yaml) | Allows incoming connections from cluster LAN devices, forwarding requests to backends, and checking Vault OIDC provider. |
 | SecurityPolicy | gateway-oidc | [gateway/security-policy.yaml](gateway/security-policy.yaml) | Configures OIDC authentication for the api-gateway Gateway using the Vault provider. | 
 | VaultAuth | envoy-gateway | [gateway/vault-secrets.yaml](gateway/vault-secrets.yaml) | Authenticates the trust-manager ServiceAccount against the `trust-manager` Vault Kubernetes auth role. |
 | VaultStaticSecret | envoy-gateway-oidc | [gateway/vault-secrets.yaml](gateway/vault-secrets.yaml) | Configures Vault Secrets Operator to populate the `envoy-gateway-oidc` Secret with the OIDC client ID and secret for the Vault. |

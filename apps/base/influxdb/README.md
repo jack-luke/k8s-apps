@@ -10,5 +10,6 @@
 | HelmRepository | influxdb | [helm-repository.yaml](helm-repository.yaml) | InfluxDB Helm charts. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | influxdb | [namespace.yaml](namespace.yaml) |  |
+| NetworkPolicy | influxdb | [network-policy.yaml](network-policy.yaml) | Allows data to be written by Vector and read by Grafana. |
 | VaultAuth | influxdb | [vault-secrets.yaml](vault-secrets.yaml) | Authenticates the inflxudb ServiceAccount against the inflxudb Vault Kubernetes auth role. |
 | VaultStaticSecret | influxdb-auth | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the influxdb-auth Secret with InfluxDB admin user credentials and token. |

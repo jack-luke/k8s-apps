@@ -17,6 +17,7 @@ Datasources are configured inline in the Helm values.
 | HTTPRouteFilter | credential-injection | [http-route.yaml](http-route.yaml) | The gateway provides OIDC authentication, so this configures credential injection with the `grafana-basic-auth` Secret to automatically authenticate to the Grafana server. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | grafana | [namespace.yaml](namespace.yaml) |  |
+| NetworkPolicy | grafana | [network-policy.yaml](network-policy.yaml) | Allows reading data from datasource pods and serving connections from the gateway. |
 | VaultAuth | grafana | [vault-secrets.yaml](vault-secrets.yaml) | Authenticates the grafana ServiceAccount against the grafana Vault Kubernetes auth role. |
 | VaultStaticSecret | grafana-basic-auth | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the grafana-basic-auth Secret with Grafana admin user credentials in basic auth format. |
 | VaultStaticSecret | grafana-auth | [vault-secrets.yaml](vault-secrets.yaml) | Configures Vault Secrets Operator to populate the grafana-auth Secret with Grafana admin user credentials. |

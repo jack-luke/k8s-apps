@@ -9,6 +9,7 @@
 | Bundle | vault-server-ca | [bundle.yaml](bundle.yaml) | Trust Manager Bundle containing the CA chain of the Vault server. |
 | ClusterIssuer | vault-issuer | [cluster-issuer.yaml](cluster-issuer.yaml) | Cert Manager Vault ClusterIssuer for issuing certificates from the Vault issuing PKI mount. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) | |
+| NetworkPolicy | cert-manager | [network-policy.yaml](network-policy.yaml) | Allows Cert Manager to send certificate signing requests to Vault. |
 | Role | vault-issuer | [cluster-issuer-rbac.yaml](cluster-issuer-rbac.yaml) | Permits Cert Manager to create ServiceAccount tokens for vault-issuer. |
 | RoleBinding | vault-issuer | [cluster-issuer-rbac.yaml](cluster-issuer-rbac.yaml) | Binds the vault-issuer Role to the cert-manager ServiceAccount. | 
 | ServiceAccount | vault-issuer | [cluster-issuer-sa.yaml](cluster-issuer-sa.yaml) | ServiceAccount for the Cert Manager Vault ClusterIssuer |

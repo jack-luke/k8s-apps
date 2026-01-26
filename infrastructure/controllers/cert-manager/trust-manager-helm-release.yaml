@@ -16,6 +16,8 @@ spec:
   releaseName: trust-manager
   driftDetection:
     mode: enabled
+  install:
+    disableWait: true
   values:
     secretTargets:
       enabled: true

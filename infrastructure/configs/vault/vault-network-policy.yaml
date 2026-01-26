@@ -69,7 +69,12 @@ spec:
       ports:
         - port: 9000
           protocol: UDP
-    # Allow DNS resolution
-    - ports:
-        - port: 53
-          protocol: UDP
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
