@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: cache-proxy
   annotations:
-    metallb.io/loadBalancerIPs: 192.168.8.65
+    metallb.io/loadBalancerIPs: ${MEMCACHED_EXTERNAL_IP}
 spec:
   type: LoadBalancer
   ports:

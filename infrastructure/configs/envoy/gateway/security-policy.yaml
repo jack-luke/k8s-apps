@@ -9,7 +9,7 @@ spec:
       name: api-gateway
   oidc:
     provider:
-      issuer: "https://vault.homelab:8200/v1/identity/oidc/provider/default"
+      issuer: "https://${VAULT_HOSTNAME}:8200/v1/identity/oidc/provider/default"
       backendRefs:
         - group: gateway.envoyproxy.io
           kind: Backend
@@ -19,7 +19,7 @@ spec:
       name: "envoy-gateway-oidc"
     clientSecret:
       name: "envoy-gateway-oidc"
-    redirectURL: "https://gateway.homelab/oauth2/callback"
+    redirectURL: "https://${ENVOY_HOSTNAME}/oauth2/callback"
     logoutPath: "/logout"
   authorization:
     defaultAction: Deny
@@ -27,4 +27,4 @@ spec:
       - action: Allow
         principal:
           clientCIDRs:
-            - 192.168.8.0/24
+            - ${EXTERNAL_ACCESS_CIDR}

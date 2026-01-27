@@ -73,6 +73,27 @@ that should be applied to the cluster.
 Depends on the `policy-controllers` Kustomization, to ensure that all CRDs and 
 policy engines are installed prior to installing these resources.
 
+## Configuration
+
+### Networking
+Environment-specific network configuration such as DNS names and external 
+IPs are configured using [Flux post build variable substitution](https://fluxcd.io/flux/components/kustomize/kustomizations/#post-build-variable-substitution).
+
+Values are set using a ConfigMap named `network-config` in the `flux-system`
+namespace. This ConfigMap just has to exist at Kustomize build time, so it can
+be provisioned with the cluster if needed.
+
+| ConfigMap Key | Description |
+| --- | --- |
+| EXTERNAL_ACCESS_CIDR | CIDR that is allowed to access cluster services from outside the cluster. Used in NetworkPolicies and Gateway resources for ingress rules. |
+| KUBERNETES_API_CIDR | CIDR that the Kubernetes API can be reached on. Used in NetworkPolicies to allow apps API access. |
+| KUBERNETES_API_PORT |  Port that the Kubernetes API is exposed on. Used in NetworkPolicies to allow apps API access. |
+| ENVOY_EXTERNAL_IP | External IP that MetalLB assigns to the Envoy Gateway. |
+| ENVOY_HOSTNAME | Hostname that the Envoy Gateway can be reached on externally. Used for Gateway routing and OIDC callback URLs. |
+| VAULT_EXTERNAL_IP | External IP that MetalLB assigns to the Vault server. |
+| VAULT_HOSTNAME | Hostname that the Vault server can be reached on externally. Used for OIDC provider URLs.|
+| MEMCACHED_EXTERNAL_IP | External IP that MetalLB assigns to the Memcached Proxy. |
+
 ## Secrets Management
 All applications and services in the repository leverage Vault and Vault 
 Secrets Operator for secrets management. 

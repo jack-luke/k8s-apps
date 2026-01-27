@@ -38,9 +38,9 @@ spec:
     # Allow Kubernetes API server access for pod log metadata
     - to:
         - ipBlock:
-            cidr: 192.168.8.0/24
+            cidr: ${KUBERNETES_API_CIDR}
       ports:
-        - port: 6443
+        - port: ${KUBERNETES_API_PORT}
           protocol: TCP
     - to:
         - namespaceSelector:

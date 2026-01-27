@@ -7,7 +7,7 @@ spec:
     - name: api-gateway
       namespace: envoy
   hostnames: 
-    - gateway.homelab
+    - ${ENVOY_HOSTNAME}
   rules:
     - matches:
         - path:

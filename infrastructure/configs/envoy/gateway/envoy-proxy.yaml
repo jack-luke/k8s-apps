@@ -8,7 +8,7 @@ spec:
     kubernetes:
       envoyService:
         annotations:
-          metallb.io/loadBalancerIPs: 192.168.8.55
+          metallb.io/loadBalancerIPs: ${ENVOY_EXTERNAL_IP}
       envoyDeployment:
         pod:
           annotations:

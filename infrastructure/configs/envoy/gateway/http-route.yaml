@@ -6,7 +6,8 @@ spec:
   parentRefs:
     - name: api-gateway
       namespace: envoy
-  hostnames: ["gateway.homelab"] 
+  hostnames: 
+    - ${ENVOY_HOSTNAME}
   rules:
     - matches:
         - path:

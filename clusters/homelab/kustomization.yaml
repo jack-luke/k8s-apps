@@ -5,6 +5,7 @@ metadata:
   namespace: flux-system
 interval: 5m0s
 resources:
-  - ./infrastructure.yaml
-  - ./apps.yaml
-  - ./policy.yaml
+  - infrastructure.yaml
+  - apps.yaml
+  - policy.yaml
+  - network-config.yaml

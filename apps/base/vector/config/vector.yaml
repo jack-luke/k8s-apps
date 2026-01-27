@@ -26,11 +26,11 @@ sources:
 
   vector_forwarded:
     type: vector
-    address: 0.0.0.0:${VECTOR_SERVICE_PORT_FORWARDING}
+    address: 0.0.0.0:$VECTOR_SERVICE_PORT_FORWARDING
 
   vault_metrics:
     type: statsd
-    address: 0.0.0.0:${VECTOR_SERVICE_PORT_STATSD}
+    address: 0.0.0.0:$VECTOR_SERVICE_PORT_STATSD
     mode: udp
 
   thermal:
@@ -332,13 +332,13 @@ sinks:
       - thermal_to_metric
       - vector_forwarded_router.metrics
       - remap_vault_metrics
-    endpoint: ${INFLUXDB_ADDR}
+    endpoint: $INFLUXDB_ADDR
     bucket: data
     org: homelab
-    token: ${INFLUXDB_TOKEN}
+    token: $INFLUXDB_TOKEN
     tls:
-      server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: ${INFLUXDB_CA_FILE}
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
       verify_certificate: true
       verify_hostname: true
 
@@ -349,14 +349,14 @@ sinks:
     inputs: 
       - k8s_log_router._unmatched
       - parse_* # all log parsers
-    endpoint: ${INFLUXDB_ADDR}
+    endpoint: $INFLUXDB_ADDR
     bucket: data
     org: homelab
-    token: ${INFLUXDB_TOKEN}
+    token: $INFLUXDB_TOKEN
     tags: [level, container, namespace, app, node]
     tls:
-      server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: ${INFLUXDB_CA_FILE}
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
       verify_certificate: true
       verify_hostname: true
 
@@ -367,13 +367,13 @@ sinks:
     inputs: 
       - vector_forwarded_router.logs
       - vector_forwarded_router._unmatched
-    endpoint: ${INFLUXDB_ADDR}
+    endpoint: $INFLUXDB_ADDR
     bucket: data
     org: homelab
-    token: ${INFLUXDB_TOKEN}
+    token: $INFLUXDB_TOKEN
     tags: [level, container, node, tag]
     tls:
-      server_name: ${INFLUXDB_SERVER_NAME}
-      ca_file: ${INFLUXDB_CA_FILE}
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
       verify_certificate: true
       verify_hostname: true

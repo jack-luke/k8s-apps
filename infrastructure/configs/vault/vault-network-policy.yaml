@@ -13,7 +13,7 @@ spec:
     # Allow cluster LAN devices to connect externally
     - from:
         - ipBlock:
-            cidr: 192.168.8.0/24
+            cidr: ${EXTERNAL_ACCESS_CIDR}
       ports:
         - port: 8200
           protocol: TCP
@@ -54,9 +54,9 @@ spec:
     # Allow Kubernetes API server access to verify pod ServiceAccount tokens
     - to:
         - ipBlock:
-            cidr: 192.168.8.0/24
+            cidr: ${KUBERNETES_API_CIDR}
       ports:
-        - port: 6443
+        - port: ${KUBERNETES_API_PORT}
           protocol: TCP
     # Allow sending StatsD metrics to Vector
     - to:
@@ -69,6 +69,7 @@ spec:
       ports:
         - port: 9000
           protocol: UDP
+    # Allow DNS queries to kube-system
     - to:
         - namespaceSelector:
             matchLabels:

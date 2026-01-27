@@ -4,13 +4,13 @@ metadata:
   name: api-gateway
   annotations:
     cert-manager.io/cluster-issuer: vault-issuer
-    cert-manager.io/common-name: "gateway.homelab"
+    cert-manager.io/common-name: "${ENVOY_HOSTNAME}"
 spec:
   gatewayClassName: gateway-class
   listeners:
     - name: https
       protocol: HTTPS
-      hostname: gateway.homelab
+      hostname: ${ENVOY_HOSTNAME}
       port: 443
       tls:
         mode: Terminate

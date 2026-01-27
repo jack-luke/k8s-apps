@@ -25,7 +25,7 @@ spec:
       service:
         type: LoadBalancer
         annotations:
-          metallb.io/loadBalancerIPs: 192.168.8.60
+          metallb.io/loadBalancerIPs: ${VAULT_EXTERNAL_IP}
       extraEnvironmentVars:
         VAULT_CACERT: /vault/userconfig/vault-server-tls/vault.ca
       volumes:
@@ -41,7 +41,7 @@ spec:
         enabled: true
         config: |
           ui = true 
-          api_addr = "https://vault.homelab:8200"
+          api_addr = "https://${VAULT_HOSTNAME}:8200"
 
           listener "tcp" {
             address = "[::]:8200"
