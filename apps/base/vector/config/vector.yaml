@@ -317,12 +317,6 @@ transforms:
       output.message = join!([to_string!(del(.message)), encode_logfmt(compact(.))], " ")
       . = output
 
-secret:
-  # InfluxDB write token provided by Vault Agent Injector
-  influxdb:
-    type: file
-    path: /vault/secrets/influxdb-token
-
 sinks:
   metrics:
     type: influxdb_metrics
