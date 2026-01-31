@@ -3,5 +3,8 @@ kind: Namespace
 metadata:
   name: vector
   labels:
+    # Permit routes in this namespace to attach to the Internal Gateway
+    gateway_access: "internal"
+
     # Injects Vault server CA with Trust Manager to verify Vault when scraping metrics
     vault-server-ca-inject: "true"

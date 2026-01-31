@@ -2,14 +2,19 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: envoy
 resources:
-  - gateway/envoy-proxy.yaml
-  - gateway/gateway-class.yaml
-  - gateway/gateway.yaml
-  - gateway/http-route.yaml
-  - gateway/security-policy.yaml
-  - gateway/backend.yaml
-  - gateway/vault-secrets.yaml
-  - gateway/network-policy.yaml
+  - gateway/oidc/envoy-proxy.yaml
+  - gateway/oidc/gateway-class.yaml
+  - gateway/oidc/gateway.yaml
+  - gateway/oidc/http-route.yaml
+  - gateway/oidc/security-policy.yaml
+  - gateway/oidc/backend.yaml
+  - gateway/oidc/vault-secrets.yaml
+  - gateway/oidc/network-policy.yaml
+
+  - gateway/internal/envoy-proxy.yaml
+  - gateway/internal/gateway-class.yaml
+  - gateway/internal/gateway.yaml
+  - gateway/internal/network-policy.yaml
   
   - certificates/envoy-certificate.yaml
   - certificates/issuer-rbac.yaml

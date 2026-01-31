@@ -58,7 +58,7 @@ spec:
           telemetry {
             disable_hostname = true
             usage_gauge_period = "1m"
-            statsd_address = "vector.vector.svc.cluster.local:9000"
+            statsd_address = "vector.vector.svc.cluster.local:8125"
           }
       resources:
         limits:

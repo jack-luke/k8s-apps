@@ -10,6 +10,7 @@ Configuration of Vector data pipelines is done using `config/vector.yaml`
 | ClusterRole | log-reader-role | [cluster-role.yaml](cluster-role.yaml) | Role to allow Vector to read Kubernetes metadata. |
 | ClusterRoleBinding | log-reader-binding | [cluster-role.yaml](cluster-role.yaml) | Binds the Vector Role to the vector ServiceAccount. |
 | DaemonSet | vector | [daemonset.yaml](daemonset.yaml) | Deploys Vector to every node of the cluster. |
+| GRPCRoute | vector | [grpc-route.yaml](grpc-route.yaml) | Routes gRPC events from the Vector Forwarding source to Vector via the Internal Gateway. |
 | Kustomization |  | [kustomization.yaml](kustomization.yaml) |  |
 | Namespace | vector | [namespace.yaml](namespace.yaml) |  |
 | NetworkPolicy | vector | [network-policy.yaml](network-policy.yaml) | Allows ingestion of events from external sources, and writing them to InfluxDB. |

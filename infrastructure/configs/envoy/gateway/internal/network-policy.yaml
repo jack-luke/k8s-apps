@@ -1,11 +1,11 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: envoy-gateway
+  name: internal-gateway
 spec:
   podSelector:
     matchLabels:
-      gateway.envoyproxy.io/owning-gateway-name: api-gateway
+      gateway.envoyproxy.io/owning-gateway-name: internal-gateway
   policyTypes:
     - Ingress
     - Egress
@@ -15,31 +15,21 @@ spec:
         - ipBlock:
             cidr: ${EXTERNAL_ACCESS_CIDR}
       ports:
-        - port: 10443
+        - port: 10080
           protocol: TCP
   egress:
-    # Allow sending OIDC auth requests to Vault
+    # Allow forwarding gRPC traffic to Vector backend
     - to:
         - podSelector:
             matchLabels:
-              app.kubernetes.io/name: vault
+              app.kubernetes.io/name: vector
         - namespaceSelector:
             matchLabels:
-              kubernetes.io/metadata.name: vault
+              kubernetes.io/metadata.name: vector
       ports:
-        - port: 8200
+        - port: 50051
           protocol: TCP
-    # Allow forwarding traffic to Grafana backend
-    - to:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: grafana
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: grafana
-      ports:
-        - port: 3000
-          protocol: TCP
+    # Allow DNS queries to kube-system
     - to:
         - namespaceSelector:
             matchLabels:

@@ -1,15 +1,36 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: influxdb
+  name: oidc-gateway
 spec:
-  podSelector: {}
+  podSelector:
+    matchLabels:
+      gateway.envoyproxy.io/owning-gateway-name: oidc-gateway
   policyTypes:
     - Ingress
     - Egress
   ingress:
-    # Allow Grafana to read data
+    # Allow cluster LAN devices to connect externally
     - from:
+        - ipBlock:
+            cidr: ${EXTERNAL_ACCESS_CIDR}
+      ports:
+        - port: 10443
+          protocol: TCP
+  egress:
+    # Allow sending OIDC auth requests to Vault
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: vault
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: vault
+      ports:
+        - port: 8200
+          protocol: TCP
+    # Allow forwarding web traffic to Grafana backend
+    - to:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: grafana
@@ -17,20 +38,8 @@ spec:
             matchLabels:
               kubernetes.io/metadata.name: grafana
       ports:
-        - port: 8086
+        - port: 3000
           protocol: TCP
-    # Allow Vector to write data
-    - from:
-        - podSelector:
-            matchLabels:
-              app.kubernetes.io/name: vector
-        - namespaceSelector:
-            matchLabels:
-              kubernetes.io/metadata.name: vector
-      ports:
-        - port: 8086
-          protocol: TCP
-  egress:
     # Allow DNS queries to kube-system
     - to:
         - namespaceSelector:

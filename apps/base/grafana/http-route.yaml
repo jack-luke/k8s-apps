@@ -4,10 +4,10 @@ metadata:
   name: grafana
 spec:
   parentRefs:
-    - name: api-gateway
+    - name: oidc-gateway
       namespace: envoy
   hostnames: 
-    - ${ENVOY_HOSTNAME}
+    - ${GATEWAY_HOSTNAME}
   rules:
     - matches:
         - path:
@@ -15,7 +15,6 @@ spec:
             value: /grafana
       backendRefs:
         - name: grafana
-          namespace: grafana
           port: 3000
           filters:
             - type: ExtensionRef

@@ -9,6 +9,7 @@ resources:
   - service.yaml
   - daemonset.yaml
   - network-policy.yaml
+  - grpc-route.yaml
 
 configMapGenerator:
   - name: vector-config

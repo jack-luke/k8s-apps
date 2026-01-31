@@ -3,4 +3,5 @@ kind: Namespace
 metadata:
   name: grafana
   labels:
-    gateway_access: "true"
+    # Permit routes in this namespace to attach to the OIDC Gateway
+    gateway_access: "oidc"

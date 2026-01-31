@@ -1,14 +1,14 @@
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: EnvoyProxy
 metadata:
-  name: proxy-config
+  name: internal-gateway-config
 spec:
   provider:
     type: Kubernetes
     kubernetes:
       envoyService:
         annotations:
-          metallb.io/loadBalancerIPs: ${ENVOY_EXTERNAL_IP}
+          metallb.io/loadBalancerIPs: ${INTERNAL_GATEWAY_IP}
       envoyDeployment:
         pod:
           annotations:

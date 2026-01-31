@@ -6,7 +6,7 @@ spec:
   targetRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway
-      name: api-gateway
+      name: oidc-gateway
   oidc:
     provider:
       issuer: "https://${VAULT_HOSTNAME}:8200/v1/identity/oidc/provider/default"
@@ -19,7 +19,7 @@ spec:
       name: "envoy-gateway-oidc"
     clientSecret:
       name: "envoy-gateway-oidc"
-    redirectURL: "https://${ENVOY_HOSTNAME}/oauth2/callback"
+    redirectURL: "https://${GATEWAY_HOSTNAME}/oauth2/callback"
     logoutPath: "/logout"
   authorization:
     defaultAction: Deny

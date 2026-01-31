@@ -4,10 +4,10 @@ metadata:
   name: homepage
 spec:
   parentRefs:
-    - name: api-gateway
+    - name: oidc-gateway
       namespace: envoy
-  hostnames: 
-    - ${ENVOY_HOSTNAME}
+  hostnames:
+    - ${GATEWAY_HOSTNAME}
   rules:
     - matches:
         - path:
@@ -84,13 +84,6 @@ spec:
         <main>
             <p>
                 This gateway is operational and accepting requests.
-                If you reached this page directly, you are likely missing the required route,
-                credentials, or headers.
-            </p>
-
-            <p>
-                Refer to the system documentation for supported endpoints and access policies.
-                Direct access through a browser is not intended for normal operation.
             </p>
         </main>
 

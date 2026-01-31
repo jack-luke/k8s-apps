@@ -88,8 +88,10 @@ be provisioned with the cluster if needed.
 | EXTERNAL_ACCESS_CIDR | CIDR that is allowed to access cluster services from outside the cluster. Used in NetworkPolicies and Gateway resources for ingress rules. |
 | KUBERNETES_API_CIDR | CIDR that the Kubernetes API can be reached on. Used in NetworkPolicies to allow apps API access. |
 | KUBERNETES_API_PORT |  Port that the Kubernetes API is exposed on. Used in NetworkPolicies to allow apps API access. |
-| ENVOY_EXTERNAL_IP | External IP that MetalLB assigns to the Envoy Gateway. |
-| ENVOY_HOSTNAME | Hostname that the Envoy Gateway can be reached on externally. Used for Gateway routing and OIDC callback URLs. |
+| OIDC_GATEWAY_IP | External IP that MetalLB assigns to the Envoy OIDC Gateway. |
+| INTERNAL_GATEWAY_IP | External IP that MetalLB assigns to the Envoy Internal Gateway. |
+| GATEWAY_HOSTNAME | Hostname that the Envoy Gateway can be reached on externally. Used for Gateway routing and OIDC callback URLs. |
+| VECTOR_HOSTNAME | Hostname that the Vector event forwarding route can be reached on externally. Used to allow Vector insatnces across the homelab to forward events. |
 | VAULT_EXTERNAL_IP | External IP that MetalLB assigns to the Vault server. |
 | VAULT_HOSTNAME | Hostname that the Vault server can be reached on externally. Used for OIDC provider URLs.|
 | MEMCACHED_EXTERNAL_IP | External IP that MetalLB assigns to the Memcached Proxy. |

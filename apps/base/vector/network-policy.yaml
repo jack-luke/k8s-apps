@@ -17,11 +17,18 @@ spec:
             matchLabels:
               kubernetes.io/metadata.name: vault
       ports:
-        - port: 9000
+        - port: 8125
           protocol: UDP
-    # Allow other Vector instances to forward events
-    - ports:
-        - port: 8222
+    # Allow recieving gRPC traffic from the Internal Gateway
+    - from:
+        - podSelector:
+            matchLabels:
+              gateway.envoyproxy.io/owning-gateway-name: internal-gateway
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy
+      ports:
+        - port: 50051
           protocol: TCP
   egress:
     # Allow writing data to InfluxDB
@@ -42,6 +49,7 @@ spec:
       ports:
         - port: ${KUBERNETES_API_PORT}
           protocol: TCP
+    # Allow DNS queries to kube-system
     - to:
         - namespaceSelector:
             matchLabels:

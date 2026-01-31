@@ -1,16 +1,16 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
-  name: api-gateway
+  name: oidc-gateway
   annotations:
     cert-manager.io/cluster-issuer: vault-issuer
-    cert-manager.io/common-name: "${ENVOY_HOSTNAME}"
+    cert-manager.io/common-name: "*.${CLUSTER_DOMAIN}"
 spec:
-  gatewayClassName: gateway-class
+  gatewayClassName: oidc-gateway-class
   listeners:
     - name: https
       protocol: HTTPS
-      hostname: ${ENVOY_HOSTNAME}
+      hostname: "*.${CLUSTER_DOMAIN}"
       port: 443
       tls:
         mode: Terminate
@@ -22,4 +22,4 @@ spec:
           from: Selector
           selector:
             matchLabels:
-              gateway_access: "true"
+              gateway_access: "oidc"

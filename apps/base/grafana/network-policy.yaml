@@ -8,11 +8,11 @@ spec:
     - Ingress
     - Egress
   ingress:
-    # Allow serving connections from Envoy Gateway
+    # Allow serving web connections from the OIDC Gateway
     - from:
         - podSelector:
             matchLabels:
-              gateway.envoyproxy.io/owning-gateway-name: api-gateway
+              gateway.envoyproxy.io/owning-gateway-name: oidc-gateway
         - namespaceSelector:
             matchLabels:
               kubernetes.io/metadata.name: envoy
@@ -31,6 +31,7 @@ spec:
       ports:
         - port: 8086
           protocol: TCP
+    # Allow DNS queries to kube-system
     - to:
         - namespaceSelector:
             matchLabels:

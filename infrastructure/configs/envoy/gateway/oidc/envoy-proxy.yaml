@@ -1,0 +1,22 @@
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: oidc-gateway-config
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        annotations:
+          metallb.io/loadBalancerIPs: ${OIDC_GATEWAY_IP}
+      envoyDeployment:
+        pod:
+          annotations:
+            reloader.stakater.com/auto: "true"
+            reloader.stakater.com/rollout-strategy: "restart"
+  backendTLS:
+    # specify client certs to use for mTLS to backends
+    clientCertificateRef:
+      kind: Secret
+      name: gateway-listener-tls
+      namespace: envoy
