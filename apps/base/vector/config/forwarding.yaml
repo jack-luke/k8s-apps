@@ -1,0 +1,47 @@
+sources:
+  vector_forwarded:
+    type: vector
+    address: 0.0.0.0:$VECTOR_SERVICE_PORT_FORWARDING
+
+transforms:
+  # Route events from external Vector instances by type
+  vector_forwarded_router:
+    type: route
+    inputs:
+      - vector_forwarded
+    route:
+      metrics: "!exists(.log)"
+      logs: exists(.log)
+
+sinks:
+  forwarded_metrics:
+    type: influxdb_metrics
+    inputs: 
+      - vector_forwarded_router.metrics
+    endpoint: $INFLUXDB_ADDR
+    bucket: data
+    org: homelab
+    token: $INFLUXDB_TOKEN
+    tls:
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
+      verify_certificate: true
+      verify_hostname: true
+
+  # Logs forwarded from other Vector instances
+  forwarded_logs:
+    type: influxdb_logs
+    measurement: docker_logs
+    inputs: 
+      - vector_forwarded_router.logs
+      - vector_forwarded_router._unmatched
+    endpoint: $INFLUXDB_ADDR
+    bucket: data
+    org: homelab
+    token: $INFLUXDB_TOKEN
+    tags: [level, container, node, tag]
+    tls:
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
+      verify_certificate: true
+      verify_hostname: true

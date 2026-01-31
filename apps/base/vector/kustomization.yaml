@@ -14,7 +14,9 @@ resources:
 configMapGenerator:
   - name: vector-config
     files:
-      - config/vector.yaml
+      - config/forwarding.yaml
+      - config/kubernetes-logs.yaml
+      - config/metrics.yaml
       
 generatorOptions:
   disableNameSuffixHash: true

@@ -79,7 +79,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -137,7 +137,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -191,7 +191,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -269,7 +269,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -326,7 +326,7 @@
           "alias": "Usage",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -380,7 +380,7 @@
           "alias": "Usage",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -516,7 +516,7 @@
           "alias": "[[tag_node]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -567,7 +567,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -618,7 +618,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -675,7 +675,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -759,7 +759,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -813,7 +813,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -891,7 +891,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -979,7 +979,7 @@
           "alias": "[[tag_node_name]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1182,7 +1182,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1264,7 +1264,7 @@
           "alias": "[[tag_node_name]] Rcv",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1324,7 +1324,7 @@
           "alias": "[[tag_node_name]] Send",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1394,7 +1394,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1479,7 +1479,7 @@
           "alias": "[[tag_node_name]] Read",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1538,7 +1538,7 @@
           "alias": "[[tag_node_name]] Write",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1629,7 +1629,7 @@
         },
         "datasource": {
           "type": "influxdb",
-          "uid": "${influxdb}"
+          "uid": "influxdb"
         },
         "definition": "SHOW TAG VALUES WITH KEY = \"node_name\"",
         "includeAll": true,

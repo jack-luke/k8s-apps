@@ -18,13 +18,13 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 3,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -131,7 +131,7 @@
           "alias": "Node Activity",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -173,7 +173,7 @@
           "alias": "Unseal",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -862,7 +862,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "description": "Go routines running in memory; a good system load indicator",
       "fieldConfig": {
@@ -947,7 +947,7 @@
           "alias": "Goroutines",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -991,7 +991,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "description": "Objects on the heap in memory; a good memory pressure indicator",
       "fieldConfig": {
@@ -1076,7 +1076,7 @@
           "alias": "Objects",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1120,7 +1120,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "description": "Total number of bytes allocated to Vault",
       "fieldConfig": {
@@ -1171,7 +1171,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {

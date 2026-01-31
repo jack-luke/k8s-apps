@@ -3,7 +3,7 @@ kind: DaemonSet
 metadata:
   name: vector
   annotations:
-    reloader.stakater.com/auto: "true"
+    secret.reloader.stakater.com/auto: "true"
     reloader.stakater.com/rollout-strategy: "restart"
 spec:
   template:
@@ -14,14 +14,19 @@ spec:
           image: timberio/vector:latest-alpine
           imagePullPolicy: Always
           ports:
-            - containerPort: 8222
+            - containerPort: 50051
               name: forwarding
-            - containerPort: 9000
+            - containerPort: 8125
               name: statsd
           envFrom:
             - secretRef:
                 name: influxdb-write-token
           env:
+            - name: VECTOR_CONFIG_DIR
+              value: "/etc/vector"
+            - name: VECTOR_WATCH_CONFIG
+              value: "true"
+
             - name: INFLUXDB_SERVER_NAME
               value: "influxdb-influxdb2.influxdb.svc.cluster.local"
             - name: INFLUXDB_ADDR

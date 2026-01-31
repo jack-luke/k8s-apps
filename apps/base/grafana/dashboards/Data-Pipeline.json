@@ -21,7 +21,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "11.5.1"
+      "version": "12.3.0"
     },
     {
       "type": "datasource",
@@ -61,7 +61,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 5,
   "links": [],
   "panels": [
     {
@@ -80,7 +80,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -150,7 +150,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -208,7 +208,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -259,7 +259,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -305,7 +305,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -399,7 +399,7 @@
           "alias": " Output",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -455,7 +455,7 @@
           "alias": "Input",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -515,7 +515,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -574,7 +574,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -610,7 +610,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -699,7 +699,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -763,7 +763,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -852,7 +852,7 @@
           "alias": "[[tag_host]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -932,7 +932,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1002,7 +1002,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1060,7 +1060,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1111,7 +1111,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1157,7 +1157,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1243,7 +1243,7 @@
           "alias": " Output",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1299,7 +1299,7 @@
           "alias": "Input",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1359,7 +1359,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1418,7 +1418,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1454,7 +1454,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1543,7 +1543,7 @@
           "alias": "[[tag_component_id]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1608,7 +1608,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "${influxdb}"
+        "uid": "influxdb"
       },
       "fieldConfig": {
         "defaults": {
@@ -1697,7 +1697,7 @@
           "alias": "[[tag_host]]",
           "datasource": {
             "type": "influxdb",
-            "uid": "${influxdb}"
+            "uid": "influxdb"
           },
           "groupBy": [
             {
@@ -1787,5 +1787,5 @@
   "timezone": "browser",
   "title": "Data Pipeline",
   "uid": "cedoscx94ga9sc",
-  "version": 1
+  "version": 3
 }

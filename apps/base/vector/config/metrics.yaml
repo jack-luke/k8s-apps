@@ -1,0 +1,131 @@
+sources:
+  internal_metrics:
+    type: internal_metrics
+    scrape_interval_secs: 10
+
+  host_metrics:
+    type: host_metrics
+    scrape_interval_secs: 10
+    collectors: [cpu, disk, load, memory, network, host]
+
+  thermal:
+    type: exec
+    command: ["cat", "/sys/class/thermal/thermal_zone0/temp"]
+    mode: scheduled
+    scheduled:
+      exec_interval_secs: 5
+    decoding:
+      codec: bytes
+
+  vault_metrics:
+    type: statsd
+    address: 0.0.0.0:$VECTOR_SERVICE_PORT_STATSD
+    mode: udp
+
+transforms:
+  # Cleanup host metrics
+  remap_host_metrics: 
+    type: remap
+    inputs: 
+      - host_metrics
+    drop_on_error: true
+    source: |
+      del(.tags.mode)
+      del(.tags.cpu)
+      del(.tags.collector)
+      del(.tags.device)
+
+      .tags.node_name = "$VECTOR_SELF_NODE_NAME"
+
+  # Convert temps to ˚C
+  remap_thermal:
+    type: remap
+    inputs:
+      - thermal
+    source: |
+      . = {
+        "temperature": to_int!(truncate!(.message, limit: 2)),
+        "node": "$VECTOR_SELF_NODE_NAME"
+      } 
+
+  # Convert thermal events to gauge metrics
+  thermal_to_metric:
+    type: log_to_metric
+    inputs:
+      - remap_thermal
+    metrics:
+      - type: gauge
+        name: thermal
+        field: temperature
+        tags:
+          node: "{{node}}"
+
+  # Remap Vault metrics in StatsD format with tags appended to metric names
+  remap_vault_metrics: 
+    type: remap
+    inputs: 
+      - vault_metrics
+    source: |
+      # Remove any 'vault-cluster-*' suffix from metric names
+      parsed, err = parse_regex(.name, r'^(?P<name>.+?)\.(?P<cluster>vault-cluster-[^.]+)$')
+      
+      if err == null {
+        .name = parsed.name
+        .tags.cluster = parsed.cluster
+      }
+
+      .name = string!(.name) 
+
+      # handle "vault.token.count.by_<field>.<field_value>.<namespace>.<cluster>" metrics
+      if starts_with(.name, "vault.token.count.") {
+        elements = split(.name, ".")
+
+        # get the field to sort by with: by_<field> 
+        field, err = replace(elements[3], "by_", "")
+        if err == null {
+          .tags = set!(value: .tags, path: [field], data: elements[5])
+        }
+
+        # name is everything up to the last 2 segments
+        .name = join!(slice!(elements, 0, -2), ".")
+      }
+
+      # handle "vault.token.creation.<namespace>.<auth_method>.<mount_point>.<creation_ttl>.<token_type>.<cluster>""
+      if starts_with(.name, "vault.token.creation.") {
+        elements = split(.name, ".")
+
+        .tags.auth_method = elements[4]
+        .tags.mount_point = elements[5]
+        .tags.creation_ttl = elements[6]
+        .tags.token_type = elements[7]
+
+        .name = "vault.token.creation"
+      }
+
+      # handle "vault.core.response_status_code.<status_code>.<code_prefix>"
+      if starts_with(.name, "vault.core.response_status_code.") {
+        elements = split(.name, ".")
+
+        .tags.status_code = elements[3]
+        .tags.code_prefix = elements[4]
+
+        .name = "vault.core.response_status_code"
+      }
+
+sinks:
+  metrics:
+    type: influxdb_metrics
+    inputs: 
+      - internal_metrics
+      - remap_host_metrics
+      - remap_vault_metrics
+      - thermal_to_metric
+    endpoint: $INFLUXDB_ADDR
+    bucket: data
+    org: homelab
+    token: $INFLUXDB_TOKEN
+    tls:
+      server_name: $INFLUXDB_SERVER_NAME
+      ca_file: $INFLUXDB_CA_FILE
+      verify_certificate: true
+      verify_hostname: true

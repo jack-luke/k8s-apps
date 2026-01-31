@@ -2,7 +2,7 @@
 
 [Vector](https://vector.dev) observability tool collects & parses observability data and writes it to InfluxDB. 
 
-Configuration of Vector data pipelines is done using `config/vector.yaml`
+Configuration of Vector data pipelines is done using YAML files in the `config` directory.
 
 ## Manifests
 | Kind | Name | File | Description |
