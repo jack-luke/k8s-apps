@@ -7,7 +7,7 @@ sources:
     type: kubernetes_logs
     glob_minimum_cooldown_ms: 5000
     ignore_older_secs: 3600
-    extra_label_selector: "app!=vector" # vector logs handled internally
+    extra_label_selector: "app.kubernetes.io/name!=vector" # vector logs handled internally
     insert_namespace_fields: false
     ingestion_timestamp_field: ""
     namespace_annotation_fields:

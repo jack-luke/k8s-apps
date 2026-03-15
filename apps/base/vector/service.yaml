@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: vector
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
     - name: forwarding
       protocol: TCP
